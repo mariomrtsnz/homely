@@ -12,4 +12,12 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="notification">Notification</string>
+    <string name="sharedpreferences_filename">login</string>
+    <string name="jwt_key">JWT_KEY</string>
+    <string name="userId">userId</string>
+    <string name="gps_requirement">GPS is disabled</string>
+    <string name="gps_requirement_title">Do you want to activate it for your location?</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
 </resources>

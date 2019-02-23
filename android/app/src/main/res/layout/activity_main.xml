@@ -1,9 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <FrameLayout
+        android:id="@+id/contenedor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/contenedor"
+        app:layout_constraintBottom_toTopOf="@+id/bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+
+    <!-- Bottom bar -->
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="5dp"
+        app:hideOnScroll="true"
+        app:navigationIcon="@drawable/ic_menu_white_24dp" />
+
+    <!-- Floating Action button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tint="@android:color/white"
+        app:fabSize="normal"
+        app:layout_anchor="@id/bar"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
