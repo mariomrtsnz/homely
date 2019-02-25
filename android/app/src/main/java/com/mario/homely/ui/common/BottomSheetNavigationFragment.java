@@ -3,6 +3,7 @@ package com.mario.homely.ui.common;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.mario.homely.R;
+import com.mario.homely.util.UtilToken;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -66,12 +68,40 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
         NavigationView navigationView = contentView.findViewById(R.id.navigation_view);
 
+        if (UtilToken.getToken(getContext()) == null) {
+            contentView.findViewById(R.id.user_email).setVisibility(View.GONE);
+            contentView.findViewById(R.id.user_name).setVisibility(View.GONE);
+            contentView.findViewById(R.id.profile_image).setVisibility(View.GONE);
+            contentView.findViewById(R.id.divider_one).setVisibility(View.GONE);
+            navigationView.getMenu().findItem(R.id.bottomdrawer_login).setVisible(true);
+            navigationView.getMenu().findItem(R.id.bottomdrawer_signup).setVisible(true);
+        } else {
+            navigationView.getMenu().findItem(R.id.bottomdrawer_my_properties).setVisible(true);
+            navigationView.getMenu().findItem(R.id.bottomdrawer_favourites).setVisible(true);
+            navigationView.getMenu().findItem(R.id.bottomdrawer_my_profile).setVisible(true);
+            navigationView.getMenu().findItem(R.id.bottomdrawer_logout).setVisible(true);
+        }
+
         //implement navigation menu item click event
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav01:
+                    case R.id.bottomdrawer_login:
+                        Intent i = new Intent(getContext(), LoginActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.id.bottomdrawer_signup:
+                        i = new Intent(getContext(), LoginActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.id.bottomdrawer_my_properties:
+                        break;
+                    case R.id.bottomdrawer_favourites:
+                        break;
+                    case R.id.bottomdrawer_my_profile:
+                        break;
+                    case R.id.bottomdrawer_logout:
                         break;
                 }
                 return false;
