@@ -88,12 +88,14 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.bottomdrawer_login:
-                        Intent i = new Intent(getContext(), LoginActivity.class);
-                        startActivity(i);
+                        Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+                        loginIntent.putExtra("isLogin", true);
+                        startActivity(loginIntent);
                         break;
                     case R.id.bottomdrawer_signup:
-                        i = new Intent(getContext(), LoginActivity.class);
-                        startActivity(i);
+                        Intent signupIntent = new Intent(getContext(), LoginActivity.class);
+                        signupIntent.putExtra("isLogin", false);
+                        startActivity(signupIntent);
                         break;
                     case R.id.bottomdrawer_my_properties:
                         break;
