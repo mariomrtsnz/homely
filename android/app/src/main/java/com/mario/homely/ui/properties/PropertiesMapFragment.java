@@ -29,7 +29,6 @@ import com.mario.homely.retrofit.generator.AuthType;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.PropertyService;
 import com.mario.homely.ui.properties.detail.PropertyDetailsActivity;
-import com.mario.homely.ui.properties.listview.PropertiesListFragment;
 import com.mario.homely.util.UtilToken;
 
 import java.util.Objects;

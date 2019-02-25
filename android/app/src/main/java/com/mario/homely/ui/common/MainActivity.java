@@ -9,8 +9,10 @@ import android.widget.Toast;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mario.homely.R;
+import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.ui.properties.PropertiesMapFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListFragment;
+import com.mario.homely.ui.properties.listview.PropertiesListListener;
 
 import java.util.Objects;
 
@@ -19,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PropertiesListListener {
 
     private BottomAppBar bottomAppBar;
     FragmentTransaction fragmentChanger;
@@ -55,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.btn_list_view:
-                        Toast.makeText(MainActivity.this, "List View clicked.", Toast.LENGTH_SHORT).show();
+                        Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                                .replace(R.id.contenedor, new PropertiesListFragment())
+                                .commit();
                         break;
                 }
                 return false;
@@ -89,11 +93,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void btnListClick() {
-//        Objects.requireNonNull(getView()).findViewById(R.id.btn_list_view).setOnClickListener(view -> {
-//            Objects.requireNonNull(getFragmentManager()).beginTransaction()
-//                    .replace(R.id.contenedor, new PropertiesListFragment())
-//                    .commit();
-//        });
+    @Override
+    public void onPropertyClick(View v, PropertyResponse property) {
+
     }
 }
