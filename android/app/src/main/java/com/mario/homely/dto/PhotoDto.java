@@ -1,9 +1,15 @@
-package com.mario.homely.responses;
+package com.mario.homely.dto;
 
-public class PhotoResponse {
+public class PhotoDto {
     private String id;
-    private PropertyResponse propertyId;
+    private String propertyId;
     private String deletehash;
+
+    public PhotoDto(String id, String propertyId, String deletehash) {
+        this.id = id;
+        this.propertyId = propertyId;
+        this.deletehash = deletehash;
+    }
 
     public String getId() {
         return id;
@@ -13,11 +19,11 @@ public class PhotoResponse {
         this.id = id;
     }
 
-    public PropertyResponse getPropertyId() {
+    public String getPropertyId() {
         return propertyId;
     }
 
-    public void setPropertyId(PropertyResponse propertyId) {
+    public void setPropertyId(String propertyId) {
         this.propertyId = propertyId;
     }
 
@@ -31,7 +37,7 @@ public class PhotoResponse {
 
     @Override
     public String toString() {
-        return "PhotoResponse{" +
+        return "PhotoDto{" +
                 "id='" + id + '\'' +
                 ", propertyId='" + propertyId + '\'' +
                 ", deletehash='" + deletehash + '\'' +

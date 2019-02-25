@@ -1,6 +1,6 @@
-package com.mario.homely.responses;
+package com.mario.homely.dto;
 
-public class PropertyResponse {
+public class PropertyDto {
     private String id;
     private String ownerId;
     private String title;
@@ -8,12 +8,36 @@ public class PropertyResponse {
     private float price;
     private int rooms;
     private float size;
-    private CategoryResponse categoryId;
+    private String categoryId;
     private String address;
     private String zipcode;
     private String city;
     private String province;
     private String loc;
+
+    public PropertyDto(String id, String ownerId, String title, String description, float price, int rooms, float size, String categoryId, String address, String zipcode, String city, String province, String loc) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.rooms = rooms;
+        this.size = size;
+        this.categoryId = categoryId;
+        this.address = address;
+        this.zipcode = zipcode;
+        this.city = city;
+        this.province = province;
+        this.loc = loc;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOwnerId() {
         return ownerId;
@@ -63,11 +87,11 @@ public class PropertyResponse {
         this.size = size;
     }
 
-    public CategoryResponse getCategoryId() {
+    public String getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(CategoryResponse categoryId) {
+    public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -111,17 +135,9 @@ public class PropertyResponse {
         this.loc = loc;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
-        return "PropertyResponse{" +
+        return "PropertyDto{" +
                 "id='" + id + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", title='" + title + '\'' +

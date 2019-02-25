@@ -88,16 +88,9 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
             if (checkDeviceLocation()) getDeviceLocation();
             else enableDeviceLocation();
         });
-
-        v.findViewById(R.id.btn_list).setOnClickListener(view -> {
-            Objects.requireNonNull(getFragmentManager()).beginTransaction()
-                    .replace(R.id.contenedor, new PropertiesListFragment())
-                    .commit();
-        });
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(Objects.requireNonNull(getContext()));
         ((SupportMapFragment) Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.map))).getMapAsync(this);
 //        btnGetLocation();
-//        btnQRClick();
 
         return v;
     }
@@ -257,17 +250,6 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
             propertyDetails.putExtra("propertyId", marker.getTag().toString());
             startActivity(propertyDetails);
             return false;
-        });
-    }
-
-    /**
-     * Action done when QR Button is clicked
-     **/
-    private void btnQRClick() {
-        Objects.requireNonNull(getView()).findViewById(R.id.btn_list).setOnClickListener(view -> {
-            Objects.requireNonNull(getFragmentManager()).beginTransaction()
-                    .replace(R.id.contenedor, new PropertiesListFragment())
-                    .commit();
         });
     }
 }

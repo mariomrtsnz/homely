@@ -10,6 +10,9 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mario.homely.R;
 import com.mario.homely.ui.properties.PropertiesMapFragment;
+import com.mario.homely.ui.properties.listview.PropertiesListFragment;
+
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -39,9 +42,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * set up Bottom Bar
-     */
     private void setUpBottomAppBar() {
         //find id
         bottomAppBar = findViewById(R.id.bar);
@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_notification:
-                        Toast.makeText(MainActivity.this, "Notification clicked.", Toast.LENGTH_SHORT).show();
+                    case R.id.btn_list_view:
+                        Toast.makeText(MainActivity.this, "List View clicked.", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return false;
@@ -83,23 +83,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_notification:
+            case R.id.btn_list_view:
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * method to toggle fab mode
-     *
-     * @param view
-     */
-    public void toggleFabMode(View view) {
-        //check the fab alignment mode and toggle accordingly
-        if (bottomAppBar.getFabAlignmentMode() == BottomAppBar.FAB_ALIGNMENT_MODE_END) {
-            bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_CENTER);
-        } else {
-            bottomAppBar.setFabAlignmentMode(BottomAppBar.FAB_ALIGNMENT_MODE_END);
-        }
+    private void btnListClick() {
+//        Objects.requireNonNull(getView()).findViewById(R.id.btn_list_view).setOnClickListener(view -> {
+//            Objects.requireNonNull(getFragmentManager()).beginTransaction()
+//                    .replace(R.id.contenedor, new PropertiesListFragment())
+//                    .commit();
+//        });
     }
 }
