@@ -1,24 +1,25 @@
-package com.mario.homely;
+package com.mario.homely.responses;
 
 public class PropertyResponse {
     private String id;
-    private String ownerId;
+    private UserResponse ownerId;
     private String title;
     private String description;
     private double price;
     private int rooms;
     private float size;
+    private CategoryResponse categoryId;
     private String address;
     private String zipcode;
     private String city;
     private String province;
     private String loc;
 
-    public String getOwnerId() {
+    public UserResponse getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(UserResponse ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -60,6 +61,14 @@ public class PropertyResponse {
 
     public void setSize(float size) {
         this.size = size;
+    }
+
+    public CategoryResponse getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(CategoryResponse categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getAddress() {
@@ -120,6 +129,7 @@ public class PropertyResponse {
                 ", price=" + price +
                 ", rooms=" + rooms +
                 ", size=" + size +
+                ", categoryId='" + categoryId + '\'' +
                 ", address='" + address + '\'' +
                 ", zipcode='" + zipcode + '\'' +
                 ", city='" + city + '\'' +

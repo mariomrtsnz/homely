@@ -5,4 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:id="@+id/contenedor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/contenedor"
+        app:layout_constraintBottom_toTopOf="@+id/bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></FrameLayout>
+
+    <!-- Bottom bar -->
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="5dp"
+        app:hideOnScroll="true"
+        app:navigationIcon="@drawable/ic_menu_black_24dp" />
+
+    <!-- Floating Action button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        app:layout_anchor="@id/bar"
+        app:srcCompat="@drawable/ic_map_white_24dp" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

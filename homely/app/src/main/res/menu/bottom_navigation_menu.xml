@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/bottomdrawer_login"
+            android:title="@string/drawer_login" />
+
+        <item
+            android:id="@+id/bottomdrawer_signup"
+            android:title="@string/drawer_register" />
+
+        <item
+            android:id="@+id/bottomdrawer_my_properties"
+            android:icon="@drawable/ic_my_properties"
+            android:title="@string/my_properties"
+            android:visible="false"/>
+        <item
+            android:id="@+id/bottomdrawer_favourites"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="@string/favs"
+            android:visible="false" />
+        <item
+            android:id="@+id/bottomdrawer_my_profile"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="@string/my_profile"
+            android:visible="false" />
+        <item
+            android:id="@+id/bottomdrawer_logout"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="@string/logout"
+            android:visible="false" />
+    </group>
+</menu>

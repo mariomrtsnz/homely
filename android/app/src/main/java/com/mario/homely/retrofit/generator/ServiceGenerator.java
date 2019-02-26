@@ -9,8 +9,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
-    private static final String BASE_URL = "https://housily.herokuapp.com/";
-    public static String MASTER_KEY = "BM2tuFpdwtuq7QbGFS7CLMcWTfxzDZAQ";
+    private static final String BASE_URL = "https://homely-2dam.herokuapp.com";
+    public static String MASTER_KEY = "YuCPtLScbyrQ6uMrH0cXo";
     public static String jwtToken = null;
 
     private static Retrofit.Builder builder =
