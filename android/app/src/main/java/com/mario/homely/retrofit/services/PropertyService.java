@@ -9,7 +9,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface PropertyService {
-    String BASE_URL = "/properties";
+    String BASE_URL = "/properties/";
 
     @GET(BASE_URL)
     Call<ResponseContainer<PropertyResponse>> listProperties(@Query("near") String latlng, @Query("max_distance") int maxDistance);

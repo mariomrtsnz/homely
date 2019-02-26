@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.mario.homely.R;
+import com.mario.homely.ui.user.MyProfileFragment;
 import com.mario.homely.util.UtilToken;
 
 import androidx.annotation.NonNull;
@@ -91,20 +92,26 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
                         Intent loginIntent = new Intent(getContext(), LoginActivity.class);
                         loginIntent.putExtra("isLogin", true);
                         startActivity(loginIntent);
-                        break;
+                        return true;
                     case R.id.bottomdrawer_signup:
                         Intent signupIntent = new Intent(getContext(), LoginActivity.class);
                         signupIntent.putExtra("isLogin", false);
                         startActivity(signupIntent);
-                        break;
+                        return true;
                     case R.id.bottomdrawer_my_properties:
-                        break;
+                        return true;
                     case R.id.bottomdrawer_favourites:
-                        break;
+                        return true;
                     case R.id.bottomdrawer_my_profile:
-                        break;
+                        getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyProfileFragment()).commit();
+                        return true;
                     case R.id.bottomdrawer_logout:
-                        break;
+                        UtilToken.setId(getContext(), null);
+                        UtilToken.setToken(getContext(), null);
+                        Intent logoutIntent = new Intent(getContext(), LoginActivity.class);
+                        logoutIntent.putExtra("isLogin", true);
+                        startActivity(logoutIntent);
+                        return true;
                 }
                 return false;
             }

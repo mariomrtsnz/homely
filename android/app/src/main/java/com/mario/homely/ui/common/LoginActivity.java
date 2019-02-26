@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener, S
         setContentView(R.layout.activity_login);
         login = new LoginFragment();
         signup = new SignUpFragment();
-        if (getIntent().getBooleanExtra("isLogin", true)) {
+        if (getIntent().getBooleanExtra("isLogin", false)) {
             fragmentChanger = getSupportFragmentManager().beginTransaction().replace(R.id.login_container, login);
             fragmentChanger.commit();
         } else {
@@ -36,7 +36,8 @@ public class LoginActivity extends AppCompatActivity implements LoginListener, S
 
     @Override
     public void goToSignUpPressed() {
-
+        fragmentChanger = getSupportFragmentManager().beginTransaction().replace(R.id.login_container, signup);
+        fragmentChanger.commit();
     }
 
     @Override
@@ -46,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements LoginListener, S
 
     @Override
     public void goToLoginPressed() {
-
+        fragmentChanger = getSupportFragmentManager().beginTransaction().replace(R.id.login_container, login);
+        fragmentChanger.commit();
     }
 }

@@ -32,12 +32,21 @@
 
     <!-- Floating Action button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fab_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tint="@android:color/white"
         app:fabSize="normal"
         app:layout_anchor="@id/bar"
-        app:srcCompat="@drawable/ic_add_black_24dp" />
+        app:srcCompat="@drawable/ic_map_white_24dp" />
+
+    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--android:id="@+id/fab_list"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:tint="@android:color/white"-->
+        <!--app:fabSize="normal"-->
+        <!--app:layout_anchor="@id/bar"-->
+        <!--android:visibility="gone"-->
+        <!--app:srcCompat="@drawable/ic_view_list_black_24dp" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

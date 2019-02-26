@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
         fragmentChanger = getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, propertiesMapFragment);
         fragmentChanger.commit();
         //click event over FAB
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.fab_map).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(MainActivity.this, "FAB Clicked.", Toast.LENGTH_SHORT).show();
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                         Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
                                 .replace(R.id.contenedor, new PropertiesListFragment())
                                 .commit();
-                        break;
+                        return true;
                 }
                 return false;
             }
@@ -84,15 +84,6 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.btn_list_view:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

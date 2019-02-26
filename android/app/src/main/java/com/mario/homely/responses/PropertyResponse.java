@@ -5,7 +5,7 @@ public class PropertyResponse {
     private String ownerId;
     private String title;
     private String description;
-    private float price;
+    private double price;
     private int rooms;
     private float size;
     private CategoryResponse categoryId;
@@ -39,11 +39,11 @@ public class PropertyResponse {
         this.description = description;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
