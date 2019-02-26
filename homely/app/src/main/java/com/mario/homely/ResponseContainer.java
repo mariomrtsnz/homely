@@ -1,4 +1,4 @@
-package com.mario.homely.responses;
+package com.mario.homely;
 
 import java.util.List;
 
@@ -21,5 +21,4 @@ public class ResponseContainer<T> {
     public void setRows(List<T> rows) {
         this.rows = rows;
     }
-
 }
