@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -21,7 +18,6 @@ import com.mario.homely.ui.properties.detail.PropertyDetailsActivity;
 import com.mario.homely.ui.properties.listview.PropertiesListFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListListener;
 import com.mario.homely.ui.user.MyProfileListener;
-import com.mario.homely.util.UtilToken;
 
 import java.util.Objects;
 
@@ -71,28 +67,22 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
         setSupportActionBar(bottomAppBar);
 
         //click event over Bottom bar menu item
-        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.btn_add:
-                        Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
-                                .replace(R.id.contenedor, new AddOnePropertyFragment())
-                                .commit();
-                        return true;
-                }
-                return false;
+        bottomAppBar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.btn_add:
+                    Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                            .replace(R.id.contenedor, new AddOnePropertyFragment())
+                            .commit();
+                    return true;
             }
+            return false;
         });
 
         //click event over navigation menu like back arrow or hamburger icon
-        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //open bottom sheet
-                BottomSheetDialogFragment bottomSheetDialogFragment = BottomSheetNavigationFragment.newInstance();
-                bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
-            }
+        bottomAppBar.setNavigationOnClickListener(view -> {
+            //open bottom sheet
+            BottomSheetDialogFragment bottomSheetDialogFragment = BottomSheetNavigationFragment.newInstance();
+            bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
         });
     }
 

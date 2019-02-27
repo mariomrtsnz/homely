@@ -6,6 +6,8 @@ import com.mario.homely.responses.ResponseContainer;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -29,5 +31,8 @@ public interface PropertyService {
 
     @GET(BASE_URL + "/fav")
     Call<PropertyResponse> getMyFavs();
+
+    @POST(BASE_URL + "/fav/{id}")
+    Call<PropertyResponse> addAsFav(@Path("id") String id);
 
 }
