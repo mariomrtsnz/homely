@@ -97,44 +97,38 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
         }
 
         //implement navigation menu item click event
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.bottomdrawer_login:
-                        Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-                        loginIntent.putExtra("isLogin", true);
-                        startActivity(loginIntent);
-                        dismiss();
-                        return true;
-                    case R.id.bottomdrawer_signup:
-                        Intent signupIntent = new Intent(getContext(), LoginActivity.class);
-                        signupIntent.putExtra("isLogin", false);
-                        startActivity(signupIntent);
-                        dismiss();
-                        return true;
-                    case R.id.bottomdrawer_my_properties:
-                        return true;
-                    case R.id.bottomdrawer_favourites:
-                        return true;
-                    case R.id.bottomdrawer_my_profile:
-                        getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyProfileFragment()).commit();
-                        dismiss();
-                        return true;
-                    case R.id.bottomdrawer_logout:
-                        logout();
-                        return true;
-                }
-                return false;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.bottomdrawer_login:
+                    Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+                    loginIntent.putExtra("isLogin", true);
+                    startActivity(loginIntent);
+                    dismiss();
+                    return true;
+                case R.id.bottomdrawer_signup:
+                    Intent signupIntent = new Intent(getContext(), LoginActivity.class);
+                    signupIntent.putExtra("isLogin", false);
+                    startActivity(signupIntent);
+                    dismiss();
+                    return true;
+                case R.id.bottomdrawer_my_properties:
+                    return true;
+                case R.id.bottomdrawer_favourites:
+                    return true;
+                case R.id.bottomdrawer_my_profile:
+                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyProfileFragment()).commit();
+                    dismiss();
+                    return true;
+                case R.id.bottomdrawer_logout:
+                    logout();
+                    return true;
             }
+            return false;
         });
         closeButton = contentView.findViewById(R.id.close_image_view);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //dismiss bottom sheet
-                dismiss();
-            }
+        closeButton.setOnClickListener(view -> {
+            //dismiss bottom sheet
+            dismiss();
         });
 
         //Set the coordinator layout behavior

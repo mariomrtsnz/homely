@@ -44,22 +44,21 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
         fragmentChanger = getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, new PropertiesListFragment());
         fragmentChanger.commit();
         fabMap = findViewById(R.id.fab_map);
-        fabMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isInMap) {
-                    Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
-                            .replace(R.id.contenedor, new PropertiesMapFragment())
-                            .commit();
-                    fabMap.setImageResource(R.drawable.ic_view_list_white_24dp);
-                    isInMap = !isInMap;
-                } else {
-                    Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
-                            .replace(R.id.contenedor, new PropertiesListFragment())
-                            .commit();
-                    fabMap.setImageResource(R.drawable.ic_map_white_24dp);
-                    isInMap = !isInMap;
-                }
+        fabMap.setOnClickListener(view -> {
+            if (isInMap) {
+                Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                        .replace(R.id.contenedor, new PropertiesMapFragment())
+                        .commit();
+//                fabMap.animate().setDuration(500).rotationY(180);
+                fabMap.setImageResource(R.drawable.ic_view_list_white_24dp);
+                isInMap = !isInMap;
+            } else {
+                Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                        .replace(R.id.contenedor, new PropertiesListFragment())
+                        .commit();
+//                fabMap.animate().setDuration(500).rotationY(0);
+                fabMap.setImageResource(R.drawable.ic_map_white_24dp);
+                isInMap = !isInMap;
             }
         });
     }

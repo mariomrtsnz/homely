@@ -1,12 +1,14 @@
 package com.mario.homely.ui.properties.listview;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.mario.homely.R;
 import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.responses.UserResponse;
@@ -43,7 +45,10 @@ public class PropertiesListAdapter extends RecyclerView.Adapter<PropertiesListAd
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         jwt = UtilToken.getToken(context);
         viewHolder.mItem = data.get(i);
-//        Glide.with(context).load(data.get(i).getIcon()).into(viewHolder.icon);
+        String[] photoArray = data.get(i).getPhotos();
+        if (photoArray != null) {
+            Glide.with(context).load(photoArray[0]).into(viewHolder.coverImage);
+        }
         viewHolder.title.setText(data.get(i).getTitle());
         String description = data.get(i).getDescription();
         if (description.length() > 50)
@@ -52,6 +57,7 @@ public class PropertiesListAdapter extends RecyclerView.Adapter<PropertiesListAd
             viewHolder.description.setText(description);
         viewHolder.rooms.setText(String.valueOf(data.get(i).getRooms()) + " rooms");
         viewHolder.size.setText(String.valueOf(data.get(i).getSize()) + " sqft");
+        viewHolder.price.setText(String.valueOf(data.get(i).getPrice()) + " €");
 //        if (data.get(i).isEarned()) {
 //            viewHolder.earned.setVisibility(View.VISIBLE);
 //        }
@@ -71,7 +77,7 @@ public class PropertiesListAdapter extends RecyclerView.Adapter<PropertiesListAd
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView title, description, rooms, size;
+        public final TextView title, description, rooms, size, price;
         public final ImageView coverImage;
         public PropertyResponse mItem;
 
@@ -82,6 +88,7 @@ public class PropertiesListAdapter extends RecyclerView.Adapter<PropertiesListAd
             description = itemView.findViewById(R.id.tv_property_custom_item_description);
             rooms = itemView.findViewById(R.id.tv_property_custom_item_rooms);
             size = itemView.findViewById(R.id.tv_property_custom_item_size);
+            price = itemView.findViewById(R.id.tv_property_custom_item_price);
             coverImage = itemView.findViewById(R.id.property_item_bgImage);
         }
 

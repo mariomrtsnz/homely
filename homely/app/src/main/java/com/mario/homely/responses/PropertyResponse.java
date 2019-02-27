@@ -14,6 +14,7 @@ public class PropertyResponse {
     private String city;
     private String province;
     private String loc;
+    private String[] photos;
 
     public UserResponse getOwnerId() {
         return ownerId;
@@ -117,6 +118,14 @@ public class PropertyResponse {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String[] getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String[] photos) {
+        this.photos = photos;
     }
 
     @Override
