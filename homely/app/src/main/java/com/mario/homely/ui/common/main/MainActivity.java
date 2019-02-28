@@ -18,6 +18,7 @@ import com.mario.homely.ui.properties.detail.PropertyDetailsActivity;
 import com.mario.homely.ui.properties.listview.PropertiesListFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListListener;
 import com.mario.homely.ui.user.MyProfileListener;
+import com.mario.homely.util.UtilToken;
 
 import java.util.Objects;
 
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // TODO: Comprobar que si el token está nulo no salga la opción de añadir una propiedad.
-        getMenuInflater().inflate(R.menu.main_menu, menu);
+        if (UtilToken.getToken(this) != null)
+            getMenuInflater().inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

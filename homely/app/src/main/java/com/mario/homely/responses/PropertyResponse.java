@@ -15,6 +15,7 @@ public class PropertyResponse {
     private String province;
     private String loc;
     private String[] photos;
+    private boolean isFav;
 
     public UserResponse getOwnerId() {
         return ownerId;
@@ -126,6 +127,14 @@ public class PropertyResponse {
 
     public void setPhotos(String[] photos) {
         this.photos = photos;
+    }
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
     }
 
     @Override

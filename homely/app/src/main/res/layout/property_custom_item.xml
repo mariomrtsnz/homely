@@ -30,6 +30,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/realstate_placeholder" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_property_custom_item_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintEnd_toEndOf="@+id/property_item_bgImage"
+            app:layout_constraintTop_toTopOf="@+id/property_item_bgImage"
+            app:srcCompat="@drawable/ic_favorite_border_white_24dp" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="0dp"
@@ -41,7 +53,7 @@
 
             <TextView
                 android:id="@+id/property_item_title"
-                android:layout_width="319dp"
+                android:layout_width="295dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -55,11 +67,19 @@
                 android:id="@+id/tv_property_custom_item_rooms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="Prueba"
+                app:layout_constraintBottom_toBottomOf="@+id/property_item_title"
+                app:layout_constraintEnd_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/property_item_title" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/tv_property_custom_item_rooms"
+                app:srcCompat="@drawable/ic_bed" />
 
             <TextView
                 android:id="@+id/tv_property_custom_item_price"
@@ -92,7 +112,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="TextView"
                 app:layout_constraintBottom_toTopOf="@+id/tv_property_custom_item_description"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_property_custom_item_rooms" />

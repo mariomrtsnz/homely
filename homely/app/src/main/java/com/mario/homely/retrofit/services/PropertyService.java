@@ -3,8 +3,10 @@ package com.mario.homely.retrofit.services;
 import com.mario.homely.responses.GetOneContainer;
 import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.responses.ResponseContainer;
+import com.mario.homely.responses.UserResponse;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -33,6 +35,9 @@ public interface PropertyService {
     Call<PropertyResponse> getMyFavs();
 
     @POST(BASE_URL + "/fav/{id}")
-    Call<PropertyResponse> addAsFav(@Path("id") String id);
+    Call<UserResponse> addAsFav(@Path("id") String id);
+
+    @DELETE(BASE_URL + "/fav/{id}")
+    Call<UserResponse> deleteAsFav(@Path("id") String id);
 
 }

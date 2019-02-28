@@ -1,6 +1,7 @@
 package com.mario.homely.ui.properties.listview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,9 +12,12 @@ import android.widget.Toast;
 import com.mario.homely.R;
 import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.responses.ResponseContainer;
+import com.mario.homely.retrofit.generator.AuthType;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.PropertyService;
 import com.mario.homely.retrofit.services.UserService;
+import com.mario.homely.ui.common.login.LoginActivity;
+import com.mario.homely.util.UtilToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,26 +105,49 @@ public class PropertiesListFragment extends Fragment {
     }
 
     public void listProperties() {
-        PropertyService service = ServiceGenerator.createService(PropertyService.class);
-        Call<ResponseContainer<PropertyResponse>> call = service.listProperties();
-        call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
-            @Override
-            public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {
-                if (response.code() != 200) {
-                    Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
-                } else {
-                    items = response.body().getRows();
-                    adapter = new PropertiesListAdapter(ctx, items, mListener);
-                    recycler.setAdapter(adapter);
+        if (UtilToken.getToken(ctx) == null) {
+            PropertyService service = ServiceGenerator.createService(PropertyService.class);
+            Call<ResponseContainer<PropertyResponse>> call = service.listProperties();
+            call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
+                @Override
+                public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {
+                    if (response.code() != 200) {
+                        Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
+                    } else {
+                        items = response.body().getRows();
+                        adapter = new PropertiesListAdapter(ctx, items, mListener);
+                        recycler.setAdapter(adapter);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseContainer<PropertyResponse>> call, Throwable t) {
-                Log.e("Network Failure", t.getMessage());
-                Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseContainer<PropertyResponse>> call, Throwable t) {
+                    Log.e("Network Failure", t.getMessage());
+                    Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            PropertyService service = ServiceGenerator.createService(PropertyService.class, jwt, AuthType.JWT);
+            Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesAuth();
+            call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
+                @Override
+                public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {
+                    if (response.code() != 200) {
+                        Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
+                    } else {
+                        items = response.body().getRows();
+                        adapter = new PropertiesListAdapter(ctx, items, mListener);
+                        recycler.setAdapter(adapter);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseContainer<PropertyResponse>> call, Throwable t) {
+                    Log.e("Network Failure", t.getMessage());
+                    Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     @Override
@@ -129,6 +156,7 @@ public class PropertiesListFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        jwt = UtilToken.getToken(getContext());
     }
 
     @Override
@@ -155,13 +183,10 @@ public class PropertiesListFragment extends Fragment {
 
             swipeLayout = layout.findViewById(R.id.swipeContainer);
             swipeLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary), ContextCompat.getColor(getContext(), R.color.colorAccent));
-            swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    listProperties();
-                    if (swipeLayout.isRefreshing()) {
-                        swipeLayout.setRefreshing(false);
-                    }
+            swipeLayout.setOnRefreshListener(() -> {
+                listProperties();
+                if (swipeLayout.isRefreshing()) {
+                    swipeLayout.setRefreshing(false);
                 }
             });
         }

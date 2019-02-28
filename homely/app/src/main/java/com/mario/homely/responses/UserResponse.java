@@ -9,7 +9,7 @@ public class UserResponse {
     private String name;
     private String role;
     private String picture;
-    private List<PropertyResponse> favs;
+    private List<String> favs;
 
     public String get_id() {
         return _id;

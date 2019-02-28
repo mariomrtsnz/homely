@@ -84,6 +84,8 @@ public class LoginFragment extends Fragment {
                             UtilToken.setId(view.getContext(), response.body().getUser().get_id());
                             UtilToken.setUserLoggedData(view.getContext(), response.body().getUser());
                             getActivity().finish();
+                            Intent i = new Intent(getContext(), MainActivity.class);
+                            startActivity(i);
                         }
                     }
 

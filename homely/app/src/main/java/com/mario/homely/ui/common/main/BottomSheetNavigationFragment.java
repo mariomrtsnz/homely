@@ -103,13 +103,13 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
                     Intent loginIntent = new Intent(getContext(), LoginActivity.class);
                     loginIntent.putExtra("isLogin", true);
                     startActivity(loginIntent);
-                    dismiss();
+                    getActivity().finish();
                     return true;
                 case R.id.bottomdrawer_signup:
                     Intent signupIntent = new Intent(getContext(), LoginActivity.class);
                     signupIntent.putExtra("isLogin", false);
                     startActivity(signupIntent);
-                    dismiss();
+                    getActivity().finish();
                     return true;
                 case R.id.bottomdrawer_my_properties:
                     return true;
