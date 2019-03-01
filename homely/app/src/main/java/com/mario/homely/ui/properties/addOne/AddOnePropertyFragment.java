@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.mario.homely.R;
 
@@ -28,6 +31,9 @@ public class AddOnePropertyFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Button btnAdd;
+    private EditText title, description, price, rooms, size, categoryId, address, zipcode, city, province;
+
 
     private AddPropertyListener mListener;
 
@@ -66,6 +72,8 @@ public class AddOnePropertyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        btnAdd = getActivity().findViewById(R.id.btn_add_one_property_submit);
+        btnAdd.setOnClickListener(v -> mListener.onAddSubmit(title, description, price, rooms, size, categoryId, address, zipcode, city, province));
         return inflater.inflate(R.layout.fragment_add_one_property, container, false);
     }
 

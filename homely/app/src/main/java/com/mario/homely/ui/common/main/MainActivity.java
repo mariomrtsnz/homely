@@ -2,9 +2,12 @@ package com.mario.homely.ui.common.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -104,7 +107,13 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     }
 
     @Override
-    public void onAddSubmit() {
-
+    public void onAddSubmit(String title, String description, double price, int rooms, double size, String categoryId, String address, String zipcode, String city, String Province) {
+        // TODO: From address, zipcode and city get latlng (geocoding).
+        // TODO: From latlng of marker clicked on map get rest of data (reverse geocoding).
+        if (TextUtils.isEmpty(title.trim())){
+            Toast.makeText(this, "All fields are required!", Toast.LENGTH_LONG);
+        }else {
+            //do call
+        }
     }
 }

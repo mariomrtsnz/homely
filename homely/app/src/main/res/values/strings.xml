@@ -130,4 +130,6 @@
     <string name="property_details_info_subtitle">Price, rooms, size, location</string>
     <string name="property_details_description">Description</string>
     <string name="property_details_gallery_title">Gallery</string>
+    <string name="add_one_property_title_title">Title</string>
+    <string name="add_one_property_price_title">Price</string>
 </resources>
