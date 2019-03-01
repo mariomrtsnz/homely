@@ -65,8 +65,10 @@ public class PropertiesListAdapter extends RecyclerView.Adapter<PropertiesListAd
         }
         viewHolder.title.setText(data.get(i).getTitle());
         String description = data.get(i).getDescription();
-        if (description.length() > 50)
+        if (description != null && description.length() > 50)
             viewHolder.description.setText(description.substring(0, 50) + "...");
+        else if (description == null)
+            viewHolder.description.setText("No description");
         else
             viewHolder.description.setText(description);
         viewHolder.rooms.setText(String.valueOf(data.get(i).getRooms()));
