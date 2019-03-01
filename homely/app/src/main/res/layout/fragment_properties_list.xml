@@ -15,6 +15,6 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         tools:context=".ui.badges.BadgesFragment"
-        tools:listitem="@layout/fragment_properties_list" />
+        tools:listitem="@layout/property_custom_item" />
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

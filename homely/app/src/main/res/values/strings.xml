@@ -125,4 +125,9 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="action_rent_now">Rent Now</string>
+    <string name="property_details_info">Information</string>
+    <string name="property_details_info_subtitle">Price, rooms, size, location</string>
+    <string name="property_details_description">Description</string>
+    <string name="property_details_gallery_title">Gallery</string>
 </resources>

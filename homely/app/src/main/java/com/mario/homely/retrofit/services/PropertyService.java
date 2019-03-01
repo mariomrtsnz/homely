@@ -17,7 +17,7 @@ public interface PropertyService {
     String BASE_URL = "/properties";
 
     @GET(BASE_URL)
-    Call<ResponseContainer<PropertyResponse>> listProperties(@Query("near") String latlng, @Query("max_distance") int maxDistance);
+    Call<ResponseContainer<PropertyResponse>> listPropertiesNearby(@Query("near") String lnglat, @Query("max_distance") int maxDistance);
 
     @GET(BASE_URL)
     Call<ResponseContainer<PropertyResponse>> listProperties();

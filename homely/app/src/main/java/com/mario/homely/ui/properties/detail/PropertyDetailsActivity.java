@@ -17,9 +17,12 @@ import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.retrofit.generator.AuthType;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.PropertyService;
+import com.mario.homely.ui.properties.listview.PropertiesListAdapter;
 import com.mario.homely.util.UtilToken;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,9 +31,12 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
     private PropertyResponse selectedProperty;
     private ImageView goBackArrow, coverImage;
     private TextView description, direction, rooms, size, price;
-    private FloatingActionButton fabFav;
+    private RecyclerView recyclerViewGallery;
+    private FloatingActionButton fabFav, rentNow;
     private Toolbar title;
     private String[] arrayPhotos;
+    private PropertiesListAdapter adapter;
+    private PropertiesDetailsListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,15 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
         fabFav.setOnClickListener(v -> {
             addAsFav(v);
         });
-//        price = findViewById(R.id.tv_property_details_price);
+        recyclerViewGallery = findViewById(R.id.property_details_recycler_gallery);
+        recyclerViewGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        adapter = new PropertiesListAdapter(this, arrayPhotos, listener);
+        price = findViewById(R.id.tv_property_details_price);
+        rooms = findViewById(R.id.tv_property_details_rooms);
+        size = findViewById(R.id.tv_property_details_size);
+        description = findViewById(R.id.tv_property_details_description);
+//        direction = findViewById(R.id.tv_property_details_rooms);
+
 //        goBackArrow.setOnClickListener(v -> {
 //            finish();
 //        });
@@ -61,7 +75,10 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
                 } else {
                     selectedProperty = response.body().getRows();
                     title.setTitle(selectedProperty.getTitle());
-//                    price.setText(String.valueOf(selectedProperty.getPrice()));
+                    price.setText(String.valueOf(selectedProperty.getPrice()));
+                    rooms.setText(String.valueOf(selectedProperty.getRooms()));
+                    size.setText(String.valueOf(selectedProperty.getSize()));
+                    description.setText(selectedProperty.getDescription());
                     arrayPhotos = selectedProperty.getPhotos();
                     if (arrayPhotos.length != 0)
                         Glide.with(getBaseContext()).load(arrayPhotos[arrayPhotos.length-1]).into(coverImage);

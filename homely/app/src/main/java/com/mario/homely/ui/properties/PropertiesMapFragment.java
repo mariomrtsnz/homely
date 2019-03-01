@@ -169,18 +169,18 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
-//                        showNearbyLocations(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                        showNearbyLocations(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                     } else if (mLastKnownLocation != null) {
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(mLastKnownLocation.getLatitude(),
                                         mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                         mMap.getUiSettings().setMyLocationButtonEnabled(false);
-//                        showNearbyLocations(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                        showNearbyLocations(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
                     } else {
                         mMap.setMyLocationEnabled(false);
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                         mMap.getUiSettings().setMyLocationButtonEnabled(false);
-//                        showNearbyLocations(mDefaultLocation.latitude, mDefaultLocation.longitude);
+                        listProperties();
                     }
                 });
             } else if (mLastKnownLocation != null) {
@@ -188,14 +188,13 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
                         new LatLng(mLastKnownLocation.getLatitude(),
                                 mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
-//                showNearbyLocations(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                showNearbyLocations(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
             } else {
                 mMap.setMyLocationEnabled(false);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
-//                showNearbyLocations(mDefaultLocation.latitude, mDefaultLocation.longitude);
+                listProperties();
             }
-            listProperties();
         } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
@@ -265,38 +264,39 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
         }
     }
 
-//    private void showNearbyLocations(double latitude, double longitude) {
-//        PropertyService service = ServiceGenerator.createService(PropertyService.class, ServiceGenerator.MASTER_KEY, AuthType.NO_AUTH);
-//
-//        String coords = longitude + "," + latitude;
-//        Call<ResponseContainer<PropertyResponse>> call = service.listProperties();
-//
-//        call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ResponseContainer<PropertyResponse>> call, @NonNull Response<ResponseContainer<PropertyResponse>> response) {
-//                if (response.code() != 200) {
-//                    Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    mMap.clear();
-//                    for (PropertyResponse property : Objects.requireNonNull(response.body()).getRows()) {
-//                        double lng = Double.parseDouble(property.getLoc().split(", ")[0]);
-//                        double lat = Double.parseDouble(property.getLoc().split(", ")[1]);
-//                        mMap.addMarker(new MarkerOptions()
-//                                .position(new LatLng(lng, lat))
-//                                .title(property.getTitle())
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker))
-//                        ).setTag(property.getId());
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<ResponseContainer<PropertyResponse>> call, @NonNull Throwable t) {
-//                Log.e("Network Failure", t.getMessage());
-//                Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void showNearbyLocations(double latitude, double longitude) {
+        PropertyService service = ServiceGenerator.createService(PropertyService.class);
+        String coords = longitude + "," + latitude;
+        Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesNearby(coords, 5000);
+
+        call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseContainer<PropertyResponse>> call, @NonNull Response<ResponseContainer<PropertyResponse>> response) {
+                if (response.code() != 200) {
+                    Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    mMap.clear();
+                    for (PropertyResponse property : Objects.requireNonNull(response.body()).getRows()) {
+                        if (!property.getLoc().isEmpty()) {
+                            float lng = Float.parseFloat(property.getLoc().split(",")[0]);
+                            float lat = Float.parseFloat(property.getLoc().split(",")[1]);
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(lng, lat))
+                                    .title(property.getTitle())
+                                    .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_custom_marker))
+                            ).setTag(property.getId());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseContainer<PropertyResponse>> call, @NonNull Throwable t) {
+                Log.e("Network Failure", t.getMessage());
+                Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     /**
      * Set the config of map Interface
