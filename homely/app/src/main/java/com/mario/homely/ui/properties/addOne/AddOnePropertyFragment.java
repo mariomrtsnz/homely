@@ -1,28 +1,30 @@
 package com.mario.homely.ui.properties.addOne;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.mario.homely.R;
+import com.mario.homely.util.CustomGeocoder;
+
+import java.io.IOException;
 
 import androidx.fragment.app.Fragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddOnePropertyFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AddOnePropertyFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AddOnePropertyFragment extends Fragment {
+public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -32,7 +34,13 @@ public class AddOnePropertyFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button btnAdd;
-    private EditText title, description, price, rooms, size, categoryId, address, zipcode, city, province;
+    private EditText etTitle, etDescription, etPrice, etRooms, etSize, etCategoryId, etAddress, etZipcode, etCity, etProvince;
+    private String title, description, categoryId, address, zipcode, city, province;
+    private double price;
+    private int rooms;
+    private float size;
+    private GoogleMap mMap;
+    SupportPlaceAutocompleteFragment placeAutoComplete;
 
 
     private AddPropertyListener mListener;
@@ -69,12 +77,53 @@ public class AddOnePropertyFragment extends Fragment {
     }
 
     @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        btnAdd = getActivity().findViewById(R.id.btn_add_one_property_submit);
-        btnAdd.setOnClickListener(v -> mListener.onAddSubmit(title, description, price, rooms, size, categoryId, address, zipcode, city, province));
-        return inflater.inflate(R.layout.fragment_add_one_property, container, false);
+        View layout = inflater.inflate(R.layout.fragment_add_one_property, container, false);
+        placeAutoComplete = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete);
+        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+
+                Log.d("Maps", "Place selected: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
+
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.add_one_property_map);
+        mapFragment.getMapAsync(this);
+        btnAdd = layout.findViewById(R.id.btn_add_one_property_submit);
+        etTitle = layout.findViewById(R.id.et_add_one_property_title);
+        etDescription = layout.findViewById(R.id.et_add_one_property_description);
+        etPrice = layout.findViewById(R.id.et_add_one_property_price);
+        etRooms = layout.findViewById(R.id.et_add_one_property_rooms);
+        etSize = layout.findViewById(R.id.et_add_one_property_size);
+        btnAdd.setOnClickListener(v -> {
+            title = etTitle.getText().toString();
+            description = etDescription.getText().toString();
+            price = Double.parseDouble(etPrice.getText().toString());
+            rooms = Integer.parseInt(etRooms.getText().toString());
+            size = Float.parseFloat(etSize.getText().toString());
+            if (title.isEmpty() || description.isEmpty() ) {
+                Toast.makeText(getContext(), "All fields are required!", Toast.LENGTH_LONG);
+            } else
+                mListener.onAddSubmit(title, description, price, rooms, size, categoryId, address, zipcode, city, province);
+        });
+        return layout;
+    }
+
+    private String geocode(String address) throws IOException {
+        String loc = CustomGeocoder.getLoc(getContext(), address);
+        return loc;
     }
 
     @Override

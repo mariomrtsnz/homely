@@ -110,10 +110,6 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     public void onAddSubmit(String title, String description, double price, int rooms, double size, String categoryId, String address, String zipcode, String city, String Province) {
         // TODO: From address, zipcode and city get latlng (geocoding).
         // TODO: From latlng of marker clicked on map get rest of data (reverse geocoding).
-        if (TextUtils.isEmpty(title.trim())){
-            Toast.makeText(this, "All fields are required!", Toast.LENGTH_LONG);
-        }else {
-            //do call
-        }
+        // TODO: Do call
     }
 }

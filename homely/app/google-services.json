@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "459418186624",
+    "firebase_url": "https://homely-2dam.firebaseio.com",
+    "project_id": "homely-2dam",
+    "storage_bucket": "homely-2dam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459418186624:android:e7266ec02b616c01",
+        "android_client_info": {
+          "package_name": "com.mario.homely"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "459418186624-3u44b0h9nj2tar4hsj5m2e6gkeputk8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5JAAjugZjITIgnSewFk8LGuqhzq9chxc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
