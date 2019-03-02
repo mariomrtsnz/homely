@@ -20,7 +20,9 @@ import com.mario.homely.ui.common.login.LoginActivity;
 import com.mario.homely.util.UtilToken;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -46,8 +48,8 @@ public class PropertiesListFragment extends Fragment {
     private Context ctx;
     private int mColumnCount = 1;
     private boolean asc;
-//    MenuItem menuItemSort;
-    private boolean earnedFilter = false;
+    Map<String, String> options = new HashMap<>();
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -95,6 +97,10 @@ public class PropertiesListFragment extends Fragment {
 
     public PropertiesListFragment() {}
 
+    public PropertiesListFragment(Map<String, String> options) {
+        this.options = options;
+    }
+
     // TODO: Rename and change types and number of parameters
     public static PropertiesListFragment newInstance(int columnCount) {
         PropertiesListFragment fragment = new PropertiesListFragment();
@@ -107,7 +113,7 @@ public class PropertiesListFragment extends Fragment {
     public void listProperties() {
         if (UtilToken.getToken(ctx) == null) {
             PropertyService service = ServiceGenerator.createService(PropertyService.class);
-            Call<ResponseContainer<PropertyResponse>> call = service.listProperties();
+            Call<ResponseContainer<PropertyResponse>> call = service.listProperties(options);
             call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
                 @Override
                 public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {
@@ -128,7 +134,7 @@ public class PropertiesListFragment extends Fragment {
             });
         } else {
             PropertyService service = ServiceGenerator.createService(PropertyService.class, jwt, AuthType.JWT);
-            Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesAuth();
+            Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesAuth(options);
             call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
                 @Override
                 public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {

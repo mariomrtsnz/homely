@@ -34,8 +34,11 @@ import com.mario.homely.retrofit.generator.AuthType;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.PropertyService;
 //import com.mario.homely.ui.properties.detail.PropertyDetailsActivity;
+import com.mario.homely.ui.properties.detail.PropertyDetailsActivity;
 import com.mario.homely.util.UtilToken;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import androidx.annotation.DrawableRes;
@@ -60,7 +63,7 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
     private boolean mLocationPermissionGranted;
     private Location mLastKnownLocation;
     private String jwt;
-
+    Map<String, String> options = new HashMap<>();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -94,9 +97,6 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
         return v;
     }
 
-    /**
-     * Actions done when the map is loaded
-     **/
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -104,9 +104,6 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
         mapUIConfig();
     }
 
-    /**
-     * Check if location permissions are granted. If not, ask for it.
-     **/
     private void getLocationPermissions() {
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -120,18 +117,12 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
 
     }
 
-    /**
-     * Check if GPS is enabled
-     **/
     private boolean checkDeviceLocation() {
         LocationManager service;
         service = (LocationManager) Objects.requireNonNull(getContext()).getSystemService(LOCATION_SERVICE);
         return service.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    /**
-     * Ask the user to activate GPS
-     **/
     private void enableDeviceLocation() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         alertDialogBuilder.setTitle(R.string.gps_requirement)
@@ -141,9 +132,6 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
                 .show();
     }
 
-    /**
-     * Actions when click location Button. If GPS isn't activated, it won't give it.
-     **/
     private void btnGetLocation() {
         Objects.requireNonNull(getView()).findViewById(R.id.btn_show_myloc).setOnClickListener(view -> {
             if (checkDeviceLocation()) getDeviceLocation();
@@ -151,13 +139,6 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
         });
     }
 
-    /**
-     * Try to get your mobile location.
-     * If is enabled, show yours.
-     * If not:
-     * * Show your last location
-     * * Show the default one.
-     **/
     private void getDeviceLocation() {
         try {
             if (mLocationPermissionGranted) {
@@ -203,7 +184,7 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
     private void listProperties() {
         if (jwt == null) {
             PropertyService service = ServiceGenerator.createService(PropertyService.class);
-            Call<ResponseContainer<PropertyResponse>> call = service.listProperties();
+            Call<ResponseContainer<PropertyResponse>> call = service.listProperties(options);
             call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
                 @Override
                 public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {
@@ -233,7 +214,7 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
             });
         } else {
             PropertyService service = ServiceGenerator.createService(PropertyService.class, jwt, AuthType.JWT);
-            Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesAuth();
+            Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesAuth(options);
             call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
                 @Override
                 public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {
@@ -298,18 +279,15 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
         });
     }
 
-    /**
-     * Set the config of map Interface
-     **/
     private void mapUIConfig() {
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(Objects.requireNonNull(getContext()), R.raw.property_map_style));
 
         mMap.setOnMarkerClickListener(marker -> {
-//            Intent propertyDetails = new Intent(this.getContext(), PropertyDetailsActivity.class);
-//            propertyDetails.putExtra("propertyId", marker.getTag().toString());
-//            startActivity(propertyDetails);
+            Intent propertyDetails = new Intent(this.getContext(), PropertyDetailsActivity.class);
+            propertyDetails.putExtra("propertyId", marker.getTag().toString());
+            startActivity(propertyDetails);
             return false;
         });
     }
