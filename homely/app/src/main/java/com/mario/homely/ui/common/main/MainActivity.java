@@ -1,5 +1,6 @@
 package com.mario.homely.ui.common.main;
 
+import androidx.fragment.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,6 +20,7 @@ import com.mario.homely.ui.properties.addOne.AddOnePropertyFragment;
 import com.mario.homely.ui.properties.addOne.AddPropertyListener;
 import com.mario.homely.ui.properties.detail.PropertyDetailsActivity;
 import com.mario.homely.ui.properties.favs.MyFavsListListener;
+import com.mario.homely.ui.properties.filter.FilterDialogFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListListener;
 import com.mario.homely.ui.properties.myProperties.MyPropertiesListListener;
@@ -29,6 +31,7 @@ import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity implements PropertiesListListener, MyProfileListener, AddPropertyListener, MyPropertiesListListener, MyFavsListListener {
@@ -79,6 +82,16 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                     Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
                             .replace(R.id.contenedor, new AddOnePropertyFragment())
                             .commit();
+                    return true;
+                case R.id.btn_filter:
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+                    if (prev != null) {
+                        ft.remove(prev);
+                    }
+                    ft.addToBackStack(null);
+                    DialogFragment dialogFragment = new FilterDialogFragment();
+                    dialogFragment.show(ft, "dialog");
                     return true;
             }
             return false;

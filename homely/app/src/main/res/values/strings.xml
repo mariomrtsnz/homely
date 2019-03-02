@@ -136,4 +136,6 @@
     <string name="add_one_property_size_title">Size (sqft) </string>
     <string name="add_one_property_rooms_title">Rooms</string>
     <string name="add_one_property_address_title">Address</string>
+    <string name="menu_add_one">Add One Property</string>
+    <string name="menu_filter">Filter</string>
 </resources>

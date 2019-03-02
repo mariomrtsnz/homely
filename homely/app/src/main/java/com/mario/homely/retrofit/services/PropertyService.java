@@ -5,6 +5,8 @@ import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.responses.ResponseContainer;
 import com.mario.homely.responses.UserResponse;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -12,6 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 public interface PropertyService {
     String BASE_URL = "/properties";
@@ -20,10 +23,10 @@ public interface PropertyService {
     Call<ResponseContainer<PropertyResponse>> listPropertiesNearby(@Query("near") String lnglat, @Query("max_distance") int maxDistance);
 
     @GET(BASE_URL)
-    Call<ResponseContainer<PropertyResponse>> listProperties();
+    Call<ResponseContainer<PropertyResponse>> listProperties(@QueryMap Map<String, String> options);
 
     @GET(BASE_URL + "/auth")
-    Call<ResponseContainer<PropertyResponse>> listPropertiesAuth();
+    Call<ResponseContainer<PropertyResponse>> listPropertiesAuth(@QueryMap Map<String, String> options);
 
     @GET(BASE_URL + "/{id}")
     Call<GetOneContainer<PropertyResponse>> getProperty(@Path("id") String id);
