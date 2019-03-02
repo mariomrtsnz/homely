@@ -42,6 +42,31 @@
             app:layout_constraintTop_toTopOf="@+id/property_item_bgImage"
             app:srcCompat="@drawable/ic_favorite_border_white_24dp" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_property_custom_item_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_edit_white_24dp" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_property_custom_item_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:clickable="true"
+            android:visibility="gone"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintStart_toEndOf="@+id/fab_property_custom_item_edit"
+            app:layout_constraintTop_toTopOf="@+id/fab_property_custom_item_edit"
+            app:srcCompat="@drawable/ic_delete_black_24dp" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="0dp"

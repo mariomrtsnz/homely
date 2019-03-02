@@ -119,17 +119,29 @@
             app:layout_constraintStart_toEndOf="@+id/et_add_one_property_size"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <fragment
-            android:id="@+id/place_autocomplete"
-            android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_one_property_address_title"
+            app:layout_constraintStart_toStartOf="@+id/et_add_one_property_size"
+            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_size" />
+
+        <EditText
+            android:id="@+id/et_add_one_property_address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Address"
+            android:inputType="textPostalAddress"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_size" />
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
         <fragment
             android:id="@+id/add_one_property_map"
@@ -143,7 +155,8 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_add_one_property_submit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/place_autocomplete" />
+            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_address"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/btn_add_one_property_submit"

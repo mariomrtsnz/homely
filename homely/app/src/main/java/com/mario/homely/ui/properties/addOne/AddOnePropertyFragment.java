@@ -85,20 +85,6 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.fragment_add_one_property, container, false);
-        placeAutoComplete = (SupportPlaceAutocompleteFragment) getChildFragmentManager().findFragmentById(R.id.place_autocomplete);
-        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-
-                Log.d("Maps", "Place selected: " + place.getName());
-            }
-
-            @Override
-            public void onError(Status status) {
-                Log.d("Maps", "An error occurred: " + status);
-            }
-        });
-
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.add_one_property_map);
         mapFragment.getMapAsync(this);
         btnAdd = layout.findViewById(R.id.btn_add_one_property_submit);

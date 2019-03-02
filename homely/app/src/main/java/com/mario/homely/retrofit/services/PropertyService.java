@@ -29,10 +29,13 @@ public interface PropertyService {
     Call<GetOneContainer<PropertyResponse>> getProperty(@Path("id") String id);
 
     @GET(BASE_URL + "/mine")
-    Call<PropertyResponse> getMyProperties();
+    Call<ResponseContainer<PropertyResponse>> getMyProperties();
 
     @GET(BASE_URL + "/fav")
-    Call<PropertyResponse> getMyFavs();
+    Call<ResponseContainer<PropertyResponse>> getMyFavs();
+
+    @DELETE(BASE_URL + "/id")
+    Call<UserResponse> deleteProperty(@Path("id") String id);
 
     @POST(BASE_URL + "/fav/{id}")
     Call<UserResponse> addAsFav(@Path("id") String id);

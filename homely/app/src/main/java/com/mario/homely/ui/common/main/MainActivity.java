@@ -18,8 +18,10 @@ import com.mario.homely.ui.properties.PropertiesMapFragment;
 import com.mario.homely.ui.properties.addOne.AddOnePropertyFragment;
 import com.mario.homely.ui.properties.addOne.AddPropertyListener;
 import com.mario.homely.ui.properties.detail.PropertyDetailsActivity;
+import com.mario.homely.ui.properties.favs.MyFavsListListener;
 import com.mario.homely.ui.properties.listview.PropertiesListFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListListener;
+import com.mario.homely.ui.properties.myProperties.MyPropertiesListListener;
 import com.mario.homely.ui.user.MyProfileListener;
 import com.mario.homely.util.UtilToken;
 
@@ -29,7 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity implements PropertiesListListener, MyProfileListener, AddPropertyListener {
+public class MainActivity extends AppCompatActivity implements PropertiesListListener, MyProfileListener, AddPropertyListener, MyPropertiesListListener, MyFavsListListener {
 
     private BottomAppBar bottomAppBar;
     private boolean isInMap = true;

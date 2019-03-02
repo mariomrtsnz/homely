@@ -17,6 +17,9 @@ import com.mario.homely.R;
 import com.mario.homely.responses.UserLoginResponse;
 import com.mario.homely.responses.UserResponse;
 import com.mario.homely.ui.common.login.LoginActivity;
+import com.mario.homely.ui.properties.favs.MyFavsListFragment;
+import com.mario.homely.ui.properties.listview.PropertiesListFragment;
+import com.mario.homely.ui.properties.myProperties.MyPropertiesListFragment;
 import com.mario.homely.ui.user.MyProfileFragment;
 import com.mario.homely.util.UtilToken;
 
@@ -112,8 +115,12 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
                     getActivity().finish();
                     return true;
                 case R.id.bottomdrawer_my_properties:
+                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyPropertiesListFragment()).commit();
+                    dismiss();
                     return true;
                 case R.id.bottomdrawer_favourites:
+                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyFavsListFragment()).commit();
+                    dismiss();
                     return true;
                 case R.id.bottomdrawer_my_profile:
                     getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyProfileFragment()).commit();
