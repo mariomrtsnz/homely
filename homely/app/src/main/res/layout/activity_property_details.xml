@@ -204,8 +204,8 @@
                 android:layout_margin="@dimen/card_margin">
 
                 <LinearLayout
-                    android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <com.github.florent37.expansionpanel.ExpansionHeader
@@ -284,8 +284,8 @@
                 android:layout_margin="@dimen/card_margin">
 
                 <LinearLayout
-                    android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <com.github.florent37.expansionpanel.ExpansionHeader
@@ -372,16 +372,10 @@
 
             </androidx.cardview.widget.CardView>
 
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:map="http://schemas.android.com/apk/res-auto"
-                android:name="com.google.android.gms.maps.MapFragment"
+            <com.google.android.gms.maps.MapView
                 android:id="@+id/property_details_lite_map"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                map:cameraZoom="13"
-                map:mapType="normal"
-                map:liteMode="true"
-                android:layout_margin="@dimen/card_margin" />
+                android:layout_height="200dp" />
 
         </LinearLayout>
 

@@ -59,7 +59,7 @@ public class MyFavsListAdapter extends RecyclerView.Adapter<MyFavsListAdapter.Vi
         viewHolder.isFav = true;
         if (viewHolder.isFav)
             viewHolder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
-        if (photoArray != null) {
+        if (photoArray.size() > 0) {
             Glide.with(context).load(photoArray.get(0)).into(viewHolder.coverImage);
         }
         viewHolder.title.setText(data.get(i).getTitle());

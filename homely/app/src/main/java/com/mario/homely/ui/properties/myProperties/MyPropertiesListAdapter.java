@@ -55,16 +55,17 @@ public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesLi
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         jwt = UtilToken.getToken(context);
         viewHolder.mItem = data.get(i);
-        String[] photoArray = data.get(i).getPhotos();
+        List<String> photoArray = data.get(i).getPhotos();
         viewHolder.edit.setVisibility(View.VISIBLE);
         viewHolder.delete.setVisibility(View.VISIBLE);
+        viewHolder.photos.setVisibility(View.VISIBLE);
         if (jwt == null)
             viewHolder.fav.setVisibility(View.GONE);
         viewHolder.isFav = data.get(i).isFav();
         if (viewHolder.isFav)
             viewHolder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
-        if (photoArray != null) {
-            Glide.with(context).load(photoArray[0]).into(viewHolder.coverImage);
+        if (photoArray.size() > 0) {
+            Glide.with(context).load(photoArray.get(0)).into(viewHolder.coverImage);
         }
         viewHolder.title.setText(data.get(i).getTitle());
         String description = data.get(i).getDescription();
@@ -80,6 +81,7 @@ public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesLi
         viewHolder.fav.setOnClickListener(v -> updateFav(viewHolder, data.get(i)));
         viewHolder.delete.setOnClickListener(v -> mListener.onPropertyDeleteClick(v, data.get(i)));
         viewHolder.edit.setOnClickListener(v -> mListener.onPropertyEditClick(v, data.get(i)));
+        viewHolder.photos.setOnClickListener(v -> mListener.onPhotosClick(v, data.get(i)));
         viewHolder.mView.setOnClickListener(v -> mListener.onPropertyClick(v, viewHolder.mItem));
     }
 
@@ -133,7 +135,7 @@ public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesLi
         public final View mView;
         public final TextView title, description, rooms, size, price;
         public final ImageView coverImage;
-        public final FloatingActionButton fav, edit, delete;
+        public final FloatingActionButton fav, edit, delete, photos;
         public boolean isFav;
         public MyPropertiesResponse mItem;
 
@@ -149,6 +151,7 @@ public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesLi
             fav = itemView.findViewById(R.id.fab_property_custom_item_fav);
             edit = itemView.findViewById(R.id.fab_property_custom_item_edit);
             delete = itemView.findViewById(R.id.fab_property_custom_item_delete);
+            photos = itemView.findViewById(R.id.fab_property_custom_item_photos);
         }
 
     }

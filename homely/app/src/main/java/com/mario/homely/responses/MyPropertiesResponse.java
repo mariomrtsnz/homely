@@ -1,6 +1,8 @@
 package com.mario.homely.responses;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MyPropertiesResponse implements Serializable {
     private String id;
@@ -16,7 +18,7 @@ public class MyPropertiesResponse implements Serializable {
     private String city;
     private String province;
     private String loc;
-    private String[] photos;
+    private List<String> photos = new ArrayList<>();
     private boolean isFav;
 
     public String getId() {
@@ -123,11 +125,11 @@ public class MyPropertiesResponse implements Serializable {
         this.loc = loc;
     }
 
-    public String[] getPhotos() {
+    public List<String> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(String[] photos) {
+    public void setPhotos(List<String> photos) {
         this.photos = photos;
     }
 

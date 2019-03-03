@@ -1,5 +1,6 @@
 package com.mario.homely.responses;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyResponse {
@@ -16,7 +17,7 @@ public class PropertyResponse {
     private String city;
     private String province;
     private String loc;
-    private List<String> photos;
+    private List<String> photos = new ArrayList<>();
     private boolean isFav;
 
     public UserResponse getOwnerId() {

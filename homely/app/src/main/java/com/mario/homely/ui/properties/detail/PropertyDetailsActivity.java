@@ -9,11 +9,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mario.homely.R;
 import com.mario.homely.responses.GetOneContainer;
@@ -46,7 +50,9 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
     private PropertyService propertyService;
     private PropertiesDetailsListener listener;
     private boolean isFav = false;
-    private GoogleMap mMap;
+    private MapView mMap;
+    private GoogleMap map;
+    private LatLng loc;
     GoogleMapOptions options;
 
     @Override
@@ -54,10 +60,7 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_details);
         loadPropertyData(getIntent().getStringExtra("propertyId"));
-//        SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.map);
-//        new OnMapAndViewReadyListener(mapFragment, this);
-
-        options = new GoogleMapOptions().liteMode(true);
+        mMap = findViewById(R.id.property_details_lite_map);
 //        goBackArrow = findViewById(R.id.iv_property_details_goback);
         coverImage = findViewById(R.id.iv_property_details_coverImage);
         title = findViewById(R.id.tv_property_details_title);
@@ -80,6 +83,18 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
 //        });
     }
 
+    private void setmMap() {
+        if (mMap != null) {
+            mMap.onCreate(null);
+            mMap.getMapAsync(googleMap -> {
+                googleMap.clear();
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 20));
+                googleMap.addMarker(new MarkerOptions().position(loc));
+            });
+            MapsInitializer.initialize(this);
+        }
+    }
+
     private void loadPropertyData(String propertyId) {
         propertyService = ServiceGenerator.createService(PropertyService.class);
         Call<GetOneContainer<PropertyResponse>> call = propertyService.getProperty(propertyId);
@@ -99,13 +114,14 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
                     arrayPhotos = selectedProperty.getPhotos();
                     float lng = Float.parseFloat(selectedProperty.getLoc().split(",")[0]);
                     float lat = Float.parseFloat(selectedProperty.getLoc().split(",")[1]);
-                    options.camera(new CameraPosition(new LatLng(lng, lat), 0, 0, 0));
+                    loc = new LatLng(lng, lat);
                     if (selectedProperty.isFav()) {
                         fabFav.setImageResource(R.drawable.ic_favorite_black_24dp);
                         isFav = true;
                     }
                     if (arrayPhotos.size() > 0)
                         Glide.with(getBaseContext()).load(arrayPhotos.get(arrayPhotos.size()-1)).into(coverImage);
+                    setmMap();
                 }
             }
 

@@ -9,4 +9,5 @@ public interface MyPropertiesListListener {
     void onPropertyClick(View v, MyPropertiesResponse property);
     void onPropertyDeleteClick(View v, MyPropertiesResponse property);
     void onPropertyEditClick(View v, MyPropertiesResponse property);
+    void onPhotosClick(View v, MyPropertiesResponse property);
 }

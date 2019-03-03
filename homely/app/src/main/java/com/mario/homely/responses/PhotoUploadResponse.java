@@ -4,7 +4,7 @@ public class PhotoUploadResponse {
 
     private String id;
     private String propertyId;
-    private String imgurlink;
+    private String imgurLink;
     private String deletehash;
 
     public String getId() {
@@ -23,12 +23,12 @@ public class PhotoUploadResponse {
         this.propertyId = propertyId;
     }
 
-    public String getImgurlink() {
-        return imgurlink;
+    public String getImgurLink() {
+        return imgurLink;
     }
 
-    public void setImgurlink(String imgurlink) {
-        this.imgurlink = imgurlink;
+    public void setImgurLink(String imgurLink) {
+        this.imgurLink = imgurLink;
     }
 
     public String getDeletehash() {
@@ -44,7 +44,7 @@ public class PhotoUploadResponse {
         return "PhotoUploadResponse{" +
                 "id='" + id + '\'' +
                 ", propertyId='" + propertyId + '\'' +
-                ", imgurlink='" + imgurlink + '\'' +
+                ", imgurLink='" + imgurLink + '\'' +
                 ", deletehash='" + deletehash + '\'' +
                 '}';
     }

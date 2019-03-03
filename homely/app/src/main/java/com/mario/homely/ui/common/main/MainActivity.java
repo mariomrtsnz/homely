@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -28,6 +30,8 @@ import com.mario.homely.retrofit.generator.AuthType;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.PhotoService;
 import com.mario.homely.retrofit.services.PropertyService;
+import com.mario.homely.ui.photos.PhotosFragment;
+import com.mario.homely.ui.photos.PhotosListener;
 import com.mario.homely.ui.properties.PropertiesMapFragment;
 import com.mario.homely.ui.properties.addOne.AddOnePropertyFragment;
 import com.mario.homely.ui.properties.addOne.AddPropertyListener;
@@ -47,6 +51,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,7 +65,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements PropertiesListListener, MyProfileListener, AddPropertyListener, MyFavsListListener, MyPropertiesListListener {
+public class MainActivity extends AppCompatActivity implements PropertiesListListener, MyProfileListener, AddPropertyListener, MyFavsListListener, MyPropertiesListListener, PhotosListener {
 
     private BottomAppBar bottomAppBar;
     private boolean isInMap = true;
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     FragmentTransaction fragmentChanger;
     private static final int OPEN_DOCUMENT_CODE = 2;
     private PropertyResponse activeProperty;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,6 +160,16 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
      * @param v
      * @param property
      */
+
+    @Override
+    public void onPhotosClick(View v, MyPropertiesResponse property) {
+        Fragment photosFragment = new PhotosFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("propertyPhotos", new ArrayList<>(property.getPhotos()));
+        bundle.putString("propertyId", property.getId());
+        photosFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, photosFragment).commit();
+    }
 
     @Override
     public void onPropertyClick(View v, MyPropertiesResponse property) {
@@ -281,9 +297,12 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                     callPhoto.enqueue(new Callback<PhotoUploadResponse>() {
                         @Override
                         public void onResponse(Call<PhotoUploadResponse> call, Response<PhotoUploadResponse> response) {
-
                             if (response.isSuccessful()) {
-                                activeProperty.getPhotos().add(response.body().getId());
+                                activeProperty.getPhotos().add(Objects.requireNonNull(response.body()).getId());
+                                Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                                        .replace(R.id.contenedor, new MyPropertiesListFragment())
+                                        .commit();
+                                Toast.makeText(getApplicationContext(), "Created With Photo Successfully", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -295,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                     });
             }
         }
-            }
+    }
 
     @Override
     public void onEditSubmit(PropertyDto propertyEditDto, String myPropertyEditId) {
