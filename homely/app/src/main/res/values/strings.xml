@@ -141,4 +141,5 @@
     <string name="add_one_property_zipcode_title">Zipcode</string>
     <string name="add_one_property_city_title">City</string>
     <string name="add_one_property_province_title">Province</string>
+    <string name="add_one_property_photos_alert_title">Do yo wish to add a photo?</string>
 </resources>

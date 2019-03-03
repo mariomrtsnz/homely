@@ -24,6 +24,7 @@ import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.PropertyService;
 import com.mario.homely.util.UtilToken;
 
+import java.util.List;
 import java.util.Objects;
 
 import androidx.appcompat.widget.Toolbar;
@@ -40,7 +41,7 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
     private RecyclerView recyclerViewGallery;
     private FloatingActionButton fabFav, rentNow;
     private Toolbar title;
-    private String[] arrayPhotos;
+    private List<String> arrayPhotos;
     private PropertyDetailsAdapter adapter;
     private PropertyService propertyService;
     private PropertiesDetailsListener listener;
@@ -103,8 +104,8 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
                         fabFav.setImageResource(R.drawable.ic_favorite_black_24dp);
                         isFav = true;
                     }
-                    if (arrayPhotos.length != 0)
-                        Glide.with(getBaseContext()).load(arrayPhotos[arrayPhotos.length-1]).into(coverImage);
+                    if (arrayPhotos.size() > 0)
+                        Glide.with(getBaseContext()).load(arrayPhotos.get(arrayPhotos.size()-1)).into(coverImage);
                 }
             }
 

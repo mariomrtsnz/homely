@@ -16,10 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PropertyDetailsAdapter extends RecyclerView.Adapter<PropertyDetailsAdapter.ViewHolder> {
-    private String[] photosArray;
+    private List<String> photosArray;
     private Context context;
 
-    public PropertyDetailsAdapter(Context ctx, String[] data) {
+    public PropertyDetailsAdapter(Context ctx, List<String> data) {
         this.photosArray = data;
         this.context = ctx;
     }
@@ -34,14 +34,14 @@ public class PropertyDetailsAdapter extends RecyclerView.Adapter<PropertyDetails
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         if (photosArray != null) {
-            Glide.with(context).load(photosArray[i]).into(viewHolder.image);
+            Glide.with(context).load(photosArray.get(i)).into(viewHolder.image);
         }
 //        viewHolder.mView.setOnClickListener(v -> mListener.onPropertyClick(v, viewHolder.mItem));
     }
 
     @Override
     public int getItemCount() {
-        return photosArray.length;
+        return photosArray.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

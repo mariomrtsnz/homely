@@ -1,9 +1,14 @@
 package com.mario.homely.ui.common.main;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +21,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mario.homely.R;
 import com.mario.homely.dto.PropertyDto;
 import com.mario.homely.responses.MyPropertiesResponse;
+import com.mario.homely.responses.PhotoUploadResponse;
 import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.responses.UserResponse;
 import com.mario.homely.retrofit.generator.AuthType;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
+import com.mario.homely.retrofit.services.PhotoService;
 import com.mario.homely.retrofit.services.PropertyService;
 import com.mario.homely.ui.properties.PropertiesMapFragment;
 import com.mario.homely.ui.properties.addOne.AddOnePropertyFragment;
@@ -34,6 +41,11 @@ import com.mario.homely.ui.properties.myProperties.MyPropertiesListListener;
 import com.mario.homely.ui.user.MyProfileListener;
 import com.mario.homely.util.UtilToken;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -41,6 +53,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     private boolean isInMap = true;
     FloatingActionButton fabMap;
     FragmentTransaction fragmentChanger;
+    private static final int OPEN_DOCUMENT_CODE = 2;
+    private PropertyResponse activeProperty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,10 +209,26 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                 if (response.code() != 201) {
                     Toast.makeText(getApplicationContext(), "Request Error", Toast.LENGTH_SHORT).show();
                 } else {
-                    Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
-                            .replace(R.id.contenedor, new MyPropertiesListFragment())
-                            .commit();
-                    Toast.makeText(getApplicationContext(), "Created Successfully", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle(getString(R.string.add_one_property_photos_alert_title));
+
+                    String positiveText = getString(android.R.string.ok);
+                    builder.setPositiveButton(positiveText, (dialog, which) -> {
+                        activeProperty = response.body();
+                        getPhotoAndUpload();
+                    });
+
+                    String negativeText = getString(android.R.string.cancel);
+                    builder.setNegativeButton(negativeText, (dialog, which) -> {
+                        dialog.dismiss();
+                        Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                                .replace(R.id.contenedor, new MyPropertiesListFragment())
+                                .commit();
+                        Toast.makeText(getApplicationContext(), "Created Successfully", Toast.LENGTH_SHORT).show();
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             }
 
@@ -205,6 +238,64 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
             }
         });
     }
+
+    private void getPhotoAndUpload() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, OPEN_DOCUMENT_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == OPEN_DOCUMENT_CODE && resultCode == RESULT_OK) {
+            if (resultData != null) {
+                // this is the image selected by the user
+                Uri imageUri = resultData.getData();
+                InputStream inputStream = null;
+                try {
+                    inputStream = getContentResolver().openInputStream(imageUri);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+                    int cantBytes;
+                    byte[] buffer = new byte[1024 * 4];
+                    try {
+                        while ((cantBytes = bufferedInputStream.read(buffer, 0, 1024 * 4)) != -1) {
+                            baos.write(buffer, 0, cantBytes);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(imageUri)), baos.toByteArray());
+
+                    MultipartBody.Part body = MultipartBody.Part.createFormData("photo", "photo", requestFile);
+
+                    RequestBody propertyId = RequestBody.create(MultipartBody.FORM, activeProperty.getId());
+
+                    PhotoService servicePhoto = ServiceGenerator.createService(PhotoService.class, UtilToken.getToken(this), AuthType.JWT);
+                    Call<PhotoUploadResponse> callPhoto = servicePhoto.upload(body, propertyId);
+                    callPhoto.enqueue(new Callback<PhotoUploadResponse>() {
+                        @Override
+                        public void onResponse(Call<PhotoUploadResponse> call, Response<PhotoUploadResponse> response) {
+
+                            if (response.isSuccessful()) {
+                                activeProperty.getPhotos().add(response.body().getId());
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<PhotoUploadResponse> call, Throwable t) {
+                            Log.e("Upload error", t.getMessage());
+                        }
+                    });
+            }
+        }
+            }
 
     @Override
     public void onEditSubmit(PropertyDto propertyEditDto, String myPropertyEditId) {

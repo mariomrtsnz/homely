@@ -1,6 +1,7 @@
 package com.mario.homely.retrofit.services;
 
 import com.mario.homely.responses.PhotoResponse;
+import com.mario.homely.responses.PhotoUploadResponse;
 import com.mario.homely.responses.ResponseContainer;
 
 import okhttp3.MultipartBody;
@@ -22,9 +23,9 @@ public interface PhotoService {
     @GET(BASE_URL + "/{id}")
     Call<PhotoResponse> getOne(@Path("id") String id);
 
-//    @Multipart
-//    @POST(BASE_URL)
-//    Call<PhotoUploadResponse> upload(@Part MultipartBody.Part photo, @Part("propertyId") RequestBody propertyId);
+    @Multipart
+    @POST(BASE_URL)
+    Call<PhotoUploadResponse> upload(@Part MultipartBody.Part photo, @Part("propertyId") RequestBody propertyId);
 
     @DELETE(BASE_URL + "/{id}")
     Call<PhotoResponse> delete(@Path("id") String id);

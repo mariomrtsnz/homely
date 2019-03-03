@@ -54,14 +54,14 @@ public class PropertiesListAdapter extends RecyclerView.Adapter<PropertiesListAd
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         jwt = UtilToken.getToken(context);
         viewHolder.mItem = data.get(i);
-        String[] photoArray = data.get(i).getPhotos();
+        List<String> photoArray = data.get(i).getPhotos();
         if (jwt == null)
             viewHolder.fav.setVisibility(View.GONE);
         viewHolder.isFav = data.get(i).isFav();
         if (viewHolder.isFav)
             viewHolder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
         if (photoArray != null) {
-            Glide.with(context).load(photoArray[0]).into(viewHolder.coverImage);
+            Glide.with(context).load(photoArray.get(0)).into(viewHolder.coverImage);
         }
         viewHolder.title.setText(data.get(i).getTitle());
         String description = data.get(i).getDescription();
