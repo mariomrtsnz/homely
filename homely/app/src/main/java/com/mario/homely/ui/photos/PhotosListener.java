@@ -1,5 +1,8 @@
 package com.mario.homely.ui.photos;
 
-public interface PhotosListener {
+import android.view.View;
 
+public interface PhotosListener {
+    void deleteImage(View v, String deletehash);
+    void addImage(String propertyId);
 }

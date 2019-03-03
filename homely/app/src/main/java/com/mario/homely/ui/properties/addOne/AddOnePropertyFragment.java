@@ -6,8 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -19,12 +21,21 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.mario.homely.R;
 import com.mario.homely.dto.PropertyDto;
+import com.mario.homely.responses.CategoryResponse;
 import com.mario.homely.responses.MyPropertiesResponse;
+import com.mario.homely.responses.ResponseContainer;
+import com.mario.homely.retrofit.generator.ServiceGenerator;
+import com.mario.homely.retrofit.services.CategoryService;
 import com.mario.homely.util.CustomGeocoder;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +47,7 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
     private String mParam1;
     private String mParam2;
     private Button btnAdd;
+    private Spinner spinnerCategories;
     private EditText etTitle, etDescription, etPrice, etRooms, etSize, etCategoryId, etAddress, etZipcode, etCity, etProvince;
     private String title, description, categoryId, address, zipcode, city, province, loc;
     private double price;
@@ -44,6 +56,7 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
     private GoogleMap mMap;
     SupportPlaceAutocompleteFragment placeAutoComplete;
     private MyPropertiesResponse myProperty;
+    private List<CategoryResponse> categories = new ArrayList<>();
     private Context ctx;
 
 
@@ -104,6 +117,8 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
         etZipcode = layout.findViewById(R.id.et_add_one_property_zipcode);
         etCity = layout.findViewById(R.id.et_add_one_property_city);
         etProvince = layout.findViewById(R.id.et_add_one_property_province);
+        spinnerCategories = layout.findViewById(R.id.spinner_categories);
+        loadCategories();
         if (myProperty != null) {
             etTitle.setText(myProperty.getTitle());
             etDescription.setText(myProperty.getDescription());
@@ -114,36 +129,67 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
             etZipcode.setText(myProperty.getZipcode());
             etCity.setText(myProperty.getCity());
             etProvince.setText(myProperty.getProvince());
+//            spinnerCategories.setSelection(myProperty.getCategoryId());
         }
-        btnAdd.setOnClickListener(v -> {
-            title = etTitle.getText().toString();
-            description = etDescription.getText().toString();
-            address = etAddress.getText().toString();
-            zipcode = etZipcode.getText().toString();
-            city = etCity.getText().toString();
-            province = etProvince.getText().toString();
-            if (title.isEmpty() || description.isEmpty() || etPrice.getText().toString().isEmpty() || etRooms.getText().toString().isEmpty() || etSize.getText().toString().isEmpty() || address.isEmpty() || zipcode.isEmpty() || city.isEmpty() || province.isEmpty()) {
-                Toast.makeText(ctx, "All fields are required!", Toast.LENGTH_LONG).show();
+        btnAdd.setOnClickListener(v -> addProperty());
+        return layout;
+    }
+
+    private void addProperty() {
+        title = etTitle.getText().toString();
+        description = etDescription.getText().toString();
+        address = etAddress.getText().toString();
+        zipcode = etZipcode.getText().toString();
+        city = etCity.getText().toString();
+        province = etProvince.getText().toString();
+        CategoryResponse selectedCategory = (CategoryResponse) spinnerCategories.getSelectedItem();
+        categoryId = selectedCategory.getId();
+        if (title.isEmpty() || description.isEmpty() || etPrice.getText().toString().isEmpty() || etRooms.getText().toString().isEmpty() || etSize.getText().toString().isEmpty() || address.isEmpty() || zipcode.isEmpty() || city.isEmpty() || province.isEmpty()) {
+            Toast.makeText(ctx, "All fields are required!", Toast.LENGTH_LONG).show();
+        } else {
+            try {
+                String fullAddress = address + "," + zipcode + "," + city + "," + province;
+                loc = geocode(fullAddress);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            price = Double.parseDouble(etPrice.getText().toString());
+            rooms = Integer.parseInt(etRooms.getText().toString());
+            size = Float.parseFloat(etSize.getText().toString());
+            if (myProperty != null) {
+                PropertyDto propertyEditDto = new PropertyDto(title, description, price, rooms, size, categoryId, address, zipcode, city, province, loc);
+                mListener.onEditSubmit(propertyEditDto, myProperty.getId());
             } else {
-                try {
-                    String fullAddress = address + "," + zipcode + "," + city + "," + province;
-                    loc = geocode(fullAddress);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                price = Double.parseDouble(etPrice.getText().toString());
-                rooms = Integer.parseInt(etRooms.getText().toString());
-                size = Float.parseFloat(etSize.getText().toString());
-                if (myProperty != null) {
-                    PropertyDto propertyEditDto = new PropertyDto(title, description, price, rooms, size, categoryId, address, zipcode, city, province, loc);
-                    mListener.onEditSubmit(propertyEditDto, myProperty.getId());
+                PropertyDto propertyDto = new PropertyDto(title, description, price, rooms, size, categoryId, address, zipcode, city, province, loc);
+                mListener.onAddSubmit(propertyDto);
+            }
+        }
+    }
+
+    private void loadCategories() {
+        CategoryService categoryService = ServiceGenerator.createService(CategoryService.class);
+        Call<ResponseContainer<CategoryResponse>> callC = categoryService.listCategories();
+
+        callC.enqueue(new Callback<ResponseContainer<CategoryResponse>>() {
+            @Override
+            public void onResponse(Call<ResponseContainer<CategoryResponse>> call, Response<ResponseContainer<CategoryResponse>> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(ctx, "Request Error", Toast.LENGTH_SHORT).show();
                 } else {
-                    PropertyDto propertyDto = new PropertyDto(title, description, price, rooms, size, categoryId, address, zipcode, city, province, loc);
-                    mListener.onAddSubmit(propertyDto);
+                    categories = response.body().getRows();
+                    ArrayAdapter<CategoryResponse> adapter = new ArrayAdapter<>(ctx, android.R.layout.simple_spinner_dropdown_item, categories);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerCategories.setAdapter(adapter);
+                    spinnerCategories.setSelection(categories.size() - 1);
                 }
             }
+
+            @Override
+            public void onFailure(Call<ResponseContainer<CategoryResponse>> call, Throwable t) {
+                Toast.makeText(ctx, "Network Failure", Toast.LENGTH_SHORT).show();
+            }
         });
-        return layout;
+
     }
 
     private String geocode(String address) throws IOException {

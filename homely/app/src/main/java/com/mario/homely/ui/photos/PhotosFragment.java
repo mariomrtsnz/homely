@@ -28,14 +28,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PhotosFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PhotosFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PhotosFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,10 +81,12 @@ public class PhotosFragment extends Fragment {
             call.enqueue(new Callback<PhotoResponse>() {
                 @Override
                 public void onResponse(Call<PhotoResponse> call, Response<PhotoResponse> response) {
-                    if (response.code() != 200) {
+                    if (!response.isSuccessful()) {
                         Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
                     } else {
                         photoResponsesArray.add(response.body());
+                        if (photoResponsesArray.isEmpty())
+                            Toast.makeText(ctx,"No Photos Uploaded for this property", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -103,9 +97,7 @@ public class PhotosFragment extends Fragment {
                 }
             });
         }
-        if (photoResponsesArray.isEmpty())
-            Toast.makeText(ctx,"No Photos Uploaded for this property", Toast.LENGTH_LONG).show();
-        adapter = new PhotosAdapter(ctx, photoResponsesArray, mListener);
+        adapter = new PhotosAdapter(ctx, photosIdArray, mListener);
         recycler.setAdapter(adapter);
     }
 
@@ -124,8 +116,9 @@ public class PhotosFragment extends Fragment {
             }
             photoResponsesArray = new ArrayList<>();
             loadPhotos();
-            adapter = new PhotosAdapter(ctx, photoResponsesArray, mListener);
+            adapter = new PhotosAdapter(ctx, photosIdArray, mListener);
             recycler.setAdapter(adapter);
+            layout.findViewById(R.id.fab_photos_add).setOnClickListener(v -> mListener.addImage(propertyId));
         }
         return layout;
     }

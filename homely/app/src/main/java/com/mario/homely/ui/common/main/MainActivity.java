@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mario.homely.R;
 import com.mario.homely.dto.PropertyDto;
+import com.mario.homely.responses.CreatedPropertyResponse;
 import com.mario.homely.responses.MyPropertiesResponse;
 import com.mario.homely.responses.PhotoUploadResponse;
 import com.mario.homely.responses.PropertyResponse;
@@ -72,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     FloatingActionButton fabMap;
     FragmentTransaction fragmentChanger;
     private static final int OPEN_DOCUMENT_CODE = 2;
-    private PropertyResponse activeProperty;
+    private CreatedPropertyResponse activeProperty;
+    private String activePropertyId;
     private ProgressBar progressBar;
 
     @Override
@@ -172,6 +174,12 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     }
 
     @Override
+    public void addImage(String propertyId) {
+        activePropertyId = propertyId;
+        getPhotoAndUpload();
+    }
+
+    @Override
     public void onPropertyClick(View v, MyPropertiesResponse property) {
         Intent i = new Intent(this, PropertyDetailsActivity.class);
         i.putExtra("propertyId", property.getId());
@@ -218,10 +226,10 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
         // TODO: From latlng of marker clicked on map get rest of data (reverse geocoding).
         // TODO: Do call
         PropertyService propertyService = ServiceGenerator.createService(PropertyService.class, UtilToken.getToken(this), AuthType.JWT);
-        Call<PropertyResponse> call = propertyService.createProperty(propertyDto);
-        call.enqueue(new Callback<PropertyResponse>() {
+        Call<CreatedPropertyResponse> call = propertyService.createProperty(propertyDto);
+        call.enqueue(new Callback<CreatedPropertyResponse>() {
             @Override
-            public void onResponse(Call<PropertyResponse> call, Response<PropertyResponse> response) {
+            public void onResponse(Call<CreatedPropertyResponse> call, Response<CreatedPropertyResponse> response) {
                 if (response.code() != 201) {
                     Toast.makeText(getApplicationContext(), "Request Error", Toast.LENGTH_SHORT).show();
                 } else {
@@ -249,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
             }
 
             @Override
-            public void onFailure(Call<PropertyResponse> call, Throwable t) {
+            public void onFailure(Call<CreatedPropertyResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Network Failure", Toast.LENGTH_SHORT).show();
             }
         });
@@ -290,7 +298,11 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
 
                     MultipartBody.Part body = MultipartBody.Part.createFormData("photo", "photo", requestFile);
 
-                    RequestBody propertyId = RequestBody.create(MultipartBody.FORM, activeProperty.getId());
+                    RequestBody propertyId;
+                    if (activeProperty != null)
+                        propertyId = RequestBody.create(MultipartBody.FORM, activeProperty.getId());
+                    else
+                        propertyId = RequestBody.create(MultipartBody.FORM, activePropertyId);
 
                     PhotoService servicePhoto = ServiceGenerator.createService(PhotoService.class, UtilToken.getToken(this), AuthType.JWT);
                     Call<PhotoUploadResponse> callPhoto = servicePhoto.upload(body, propertyId);
@@ -298,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                         @Override
                         public void onResponse(Call<PhotoUploadResponse> call, Response<PhotoUploadResponse> response) {
                             if (response.isSuccessful()) {
-                                activeProperty.getPhotos().add(Objects.requireNonNull(response.body()).getId());
+//                                activeProperty.getPhotos().add(Objects.requireNonNull(response.body()).getId());
                                 Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
                                         .replace(R.id.contenedor, new MyPropertiesListFragment())
                                         .commit();
@@ -319,12 +331,11 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     @Override
     public void onEditSubmit(PropertyDto propertyEditDto, String myPropertyEditId) {
         // TODO: From latlng of marker clicked on map get rest of data (reverse geocoding).
-        // TODO: Do call
         PropertyService propertyService = ServiceGenerator.createService(PropertyService.class, UtilToken.getToken(this), AuthType.JWT);
-        Call<PropertyResponse> call = propertyService.editProperty(myPropertyEditId, propertyEditDto);
-        call.enqueue(new Callback<PropertyResponse>() {
+        Call<CreatedPropertyResponse> call = propertyService.editProperty(myPropertyEditId, propertyEditDto);
+        call.enqueue(new Callback<CreatedPropertyResponse>() {
             @Override
-            public void onResponse(Call<PropertyResponse> call, Response<PropertyResponse> response) {
+            public void onResponse(Call<CreatedPropertyResponse> call, Response<CreatedPropertyResponse> response) {
                 if (response.code() != 200) {
                     Toast.makeText(getApplicationContext(), "Request Error", Toast.LENGTH_SHORT).show();
                 } else {
@@ -336,9 +347,14 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
             }
 
             @Override
-            public void onFailure(Call<PropertyResponse> call, Throwable t) {
+            public void onFailure(Call<CreatedPropertyResponse> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Network Failure", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void deleteImage(View v, String deletehash) {
+
     }
 }

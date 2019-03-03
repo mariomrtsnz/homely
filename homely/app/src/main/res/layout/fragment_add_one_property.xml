@@ -204,6 +204,18 @@
             app:layout_constraintStart_toEndOf="@+id/et_add_one_property_city"
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
+        <Spinner
+            android:id="@+id/spinner_categories"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_city" />
+
         <fragment
             android:id="@+id/add_one_property_map"
             class="com.google.android.gms.maps.SupportMapFragment"
@@ -216,7 +228,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_add_one_property_submit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_city" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner_categories" />
 
         <Button
             android:id="@+id/btn_add_one_property_submit"

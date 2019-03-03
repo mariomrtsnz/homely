@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -38,7 +39,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PropertyDetailsActivity extends Activity implements PropertyDetailsListener {
+public class PropertyDetailsActivity extends Activity implements PropertyDetailsListener, OnMapReadyCallback {
     private PropertyResponse selectedProperty;
     private ImageView goBackArrow, coverImage;
     private TextView description, direction, rooms, size, price, location;
@@ -81,6 +82,11 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
 //        goBackArrow.setOnClickListener(v -> {
 //            finish();
 //        });
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
     }
 
     private void setmMap() {

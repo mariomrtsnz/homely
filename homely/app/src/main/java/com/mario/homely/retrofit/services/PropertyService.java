@@ -1,6 +1,7 @@
 package com.mario.homely.retrofit.services;
 
 import com.mario.homely.dto.PropertyDto;
+import com.mario.homely.responses.CreatedPropertyResponse;
 import com.mario.homely.responses.GetOneContainer;
 import com.mario.homely.responses.MyPropertiesResponse;
 import com.mario.homely.responses.PropertyResponse;
@@ -47,10 +48,10 @@ public interface PropertyService {
     Call<UserResponse> addAsFav(@Path("id") String id);
 
     @POST(BASE_URL)
-    Call<PropertyResponse> createProperty(@Body PropertyDto propertyDto);
+    Call<CreatedPropertyResponse> createProperty(@Body PropertyDto propertyDto);
 
     @PUT(BASE_URL + "/{id}")
-    Call<PropertyResponse> editProperty(@Path("id") String id, @Body PropertyDto propertyDto);
+    Call<CreatedPropertyResponse> editProperty(@Path("id") String id, @Body PropertyDto propertyDto);
 
     @DELETE(BASE_URL + "/fav/{id}")
     Call<UserResponse> deleteAsFav(@Path("id") String id);
