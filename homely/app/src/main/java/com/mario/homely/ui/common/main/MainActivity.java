@@ -14,7 +14,13 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mario.homely.R;
+import com.mario.homely.dto.PropertyDto;
+import com.mario.homely.responses.MyPropertiesResponse;
 import com.mario.homely.responses.PropertyResponse;
+import com.mario.homely.responses.UserResponse;
+import com.mario.homely.retrofit.generator.AuthType;
+import com.mario.homely.retrofit.generator.ServiceGenerator;
+import com.mario.homely.retrofit.services.PropertyService;
 import com.mario.homely.ui.properties.PropertiesMapFragment;
 import com.mario.homely.ui.properties.addOne.AddOnePropertyFragment;
 import com.mario.homely.ui.properties.addOne.AddPropertyListener;
@@ -23,18 +29,23 @@ import com.mario.homely.ui.properties.favs.MyFavsListListener;
 import com.mario.homely.ui.properties.filter.FilterDialogFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListFragment;
 import com.mario.homely.ui.properties.listview.PropertiesListListener;
+import com.mario.homely.ui.properties.myProperties.MyPropertiesListFragment;
 import com.mario.homely.ui.properties.myProperties.MyPropertiesListListener;
 import com.mario.homely.ui.user.MyProfileListener;
 import com.mario.homely.util.UtilToken;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements PropertiesListListener, MyProfileListener, AddPropertyListener, MyPropertiesListListener, MyFavsListListener {
+public class MainActivity extends AppCompatActivity implements PropertiesListListener, MyProfileListener, AddPropertyListener, MyFavsListListener, MyPropertiesListListener {
 
     private BottomAppBar bottomAppBar;
     private boolean isInMap = true;
@@ -121,10 +132,103 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
         startActivity(i);
     }
 
+    /**
+     * MyPropertiesListener
+     * @param v
+     * @param property
+     */
+
     @Override
-    public void onAddSubmit(String title, String description, double price, int rooms, double size, String categoryId, String address, String zipcode, String city, String Province) {
-        // TODO: From address, zipcode and city get latlng (geocoding).
+    public void onPropertyClick(View v, MyPropertiesResponse property) {
+        Intent i = new Intent(this, PropertyDetailsActivity.class);
+        i.putExtra("propertyId", property.getId());
+        startActivity(i);
+    }
+
+    @Override
+    public void onPropertyDeleteClick(View v, MyPropertiesResponse property) {
+        PropertyService propertyService = ServiceGenerator.createService(PropertyService.class, UtilToken.getToken(this), AuthType.JWT);
+        Call<UserResponse> call = propertyService.deleteProperty(property.getId());
+        call.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.code() != 204) {
+                    Toast.makeText(getApplicationContext(), "Request Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                            .replace(R.id.contenedor, new MyPropertiesListFragment())
+                            .commit();
+                    Toast.makeText(getApplicationContext(), "Deleted Successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onPropertyEditClick(View v, MyPropertiesResponse property) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("myProperty", property);
+        AddOnePropertyFragment editOneProperty = new AddOnePropertyFragment();
+        editOneProperty.setArguments(bundle);
+        Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                .replace(R.id.contenedor, editOneProperty)
+                .commit();
+    }
+
+    @Override
+    public void onAddSubmit(PropertyDto propertyDto) {
         // TODO: From latlng of marker clicked on map get rest of data (reverse geocoding).
         // TODO: Do call
+        PropertyService propertyService = ServiceGenerator.createService(PropertyService.class, UtilToken.getToken(this), AuthType.JWT);
+        Call<PropertyResponse> call = propertyService.createProperty(propertyDto);
+        call.enqueue(new Callback<PropertyResponse>() {
+            @Override
+            public void onResponse(Call<PropertyResponse> call, Response<PropertyResponse> response) {
+                if (response.code() != 201) {
+                    Toast.makeText(getApplicationContext(), "Request Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                            .replace(R.id.contenedor, new MyPropertiesListFragment())
+                            .commit();
+                    Toast.makeText(getApplicationContext(), "Created Successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PropertyResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onEditSubmit(PropertyDto propertyEditDto, String myPropertyEditId) {
+        // TODO: From latlng of marker clicked on map get rest of data (reverse geocoding).
+        // TODO: Do call
+        PropertyService propertyService = ServiceGenerator.createService(PropertyService.class, UtilToken.getToken(this), AuthType.JWT);
+        Call<PropertyResponse> call = propertyService.editProperty(myPropertyEditId, propertyEditDto);
+        call.enqueue(new Callback<PropertyResponse>() {
+            @Override
+            public void onResponse(Call<PropertyResponse> call, Response<PropertyResponse> response) {
+                if (response.code() != 200) {
+                    Toast.makeText(getApplicationContext(), "Request Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
+                            .replace(R.id.contenedor, new MyPropertiesListFragment())
+                            .commit();
+                    Toast.makeText(getApplicationContext(), "Edited Successfully", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PropertyResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Network Failure", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

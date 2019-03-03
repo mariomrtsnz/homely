@@ -18,6 +18,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.mario.homely.R;
+import com.mario.homely.dto.PropertyDto;
+import com.mario.homely.responses.MyPropertiesResponse;
 import com.mario.homely.util.CustomGeocoder;
 
 import java.io.IOException;
@@ -35,12 +37,14 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
     private String mParam2;
     private Button btnAdd;
     private EditText etTitle, etDescription, etPrice, etRooms, etSize, etCategoryId, etAddress, etZipcode, etCity, etProvince;
-    private String title, description, categoryId, address, zipcode, city, province;
+    private String title, description, categoryId, address, zipcode, city, province, loc;
     private double price;
     private int rooms;
     private float size;
     private GoogleMap mMap;
     SupportPlaceAutocompleteFragment placeAutoComplete;
+    private MyPropertiesResponse myProperty;
+    private Context ctx;
 
 
     private AddPropertyListener mListener;
@@ -73,6 +77,7 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            myProperty = (MyPropertiesResponse) getArguments().getSerializable("myProperty");
         }
     }
 
@@ -88,21 +93,55 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.add_one_property_map);
         mapFragment.getMapAsync(this);
         btnAdd = layout.findViewById(R.id.btn_add_one_property_submit);
+        if (myProperty != null)
+            btnAdd.setText("Edit");
         etTitle = layout.findViewById(R.id.et_add_one_property_title);
         etDescription = layout.findViewById(R.id.et_add_one_property_description);
         etPrice = layout.findViewById(R.id.et_add_one_property_price);
         etRooms = layout.findViewById(R.id.et_add_one_property_rooms);
         etSize = layout.findViewById(R.id.et_add_one_property_size);
+        etAddress = layout.findViewById(R.id.et_add_one_property_address);
+        etZipcode = layout.findViewById(R.id.et_add_one_property_zipcode);
+        etCity = layout.findViewById(R.id.et_add_one_property_city);
+        etProvince = layout.findViewById(R.id.et_add_one_property_province);
+        if (myProperty != null) {
+            etTitle.setText(myProperty.getTitle());
+            etDescription.setText(myProperty.getDescription());
+            etPrice.setText(String.valueOf(myProperty.getPrice()));
+            etRooms.setText(String.valueOf(myProperty.getRooms()));
+            etSize.setText(String.valueOf(myProperty.getSize()));
+            etAddress.setText(myProperty.getAddress());
+            etZipcode.setText(myProperty.getZipcode());
+            etCity.setText(myProperty.getCity());
+            etProvince.setText(myProperty.getProvince());
+        }
         btnAdd.setOnClickListener(v -> {
             title = etTitle.getText().toString();
             description = etDescription.getText().toString();
-            price = Double.parseDouble(etPrice.getText().toString());
-            rooms = Integer.parseInt(etRooms.getText().toString());
-            size = Float.parseFloat(etSize.getText().toString());
-            if (title.isEmpty() || description.isEmpty() ) {
-                Toast.makeText(getContext(), "All fields are required!", Toast.LENGTH_LONG);
-            } else
-                mListener.onAddSubmit(title, description, price, rooms, size, categoryId, address, zipcode, city, province);
+            address = etAddress.getText().toString();
+            zipcode = etZipcode.getText().toString();
+            city = etCity.getText().toString();
+            province = etProvince.getText().toString();
+            if (title.isEmpty() || description.isEmpty() || etPrice.getText().toString().isEmpty() || etRooms.getText().toString().isEmpty() || etSize.getText().toString().isEmpty() || address.isEmpty() || zipcode.isEmpty() || city.isEmpty() || province.isEmpty()) {
+                Toast.makeText(ctx, "All fields are required!", Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    String fullAddress = address + "," + zipcode + "," + city + "," + province;
+                    loc = geocode(fullAddress);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                price = Double.parseDouble(etPrice.getText().toString());
+                rooms = Integer.parseInt(etRooms.getText().toString());
+                size = Float.parseFloat(etSize.getText().toString());
+                if (myProperty != null) {
+                    PropertyDto propertyEditDto = new PropertyDto(title, description, price, rooms, size, categoryId, address, zipcode, city, province, loc);
+                    mListener.onEditSubmit(propertyEditDto, myProperty.getId());
+                } else {
+                    PropertyDto propertyDto = new PropertyDto(title, description, price, rooms, size, categoryId, address, zipcode, city, province, loc);
+                    mListener.onAddSubmit(propertyDto);
+                }
+            }
         });
         return layout;
     }
@@ -115,6 +154,7 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        this.ctx = context;
         if (context instanceof AddPropertyListener) {
             mListener = (AddPropertyListener) context;
         } else {

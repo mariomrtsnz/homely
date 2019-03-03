@@ -1,30 +1,38 @@
-package com.mario.homely.dto;
+package com.mario.homely.responses;
 
-public class PropertyDto {
+import java.io.Serializable;
+
+public class MyPropertiesResponse implements Serializable {
+    private String id;
+    private String ownerId;
     private String title;
     private String description;
     private double price;
     private int rooms;
     private float size;
-    private String categoryId;
+    private CategoryResponse categoryId;
     private String address;
     private String zipcode;
     private String city;
     private String province;
     private String loc;
+    private String[] photos;
+    private boolean isFav;
 
-    public PropertyDto(String title, String description, double price, int rooms, float size, String categoryId, String address, String zipcode, String city, String province, String loc) {
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.rooms = rooms;
-        this.size = size;
-        this.categoryId = categoryId;
-        this.address = address;
-        this.zipcode = zipcode;
-        this.city = city;
-        this.province = province;
-        this.loc = loc;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getTitle() {
@@ -67,11 +75,11 @@ public class PropertyDto {
         this.size = size;
     }
 
-    public String getCategoryId() {
+    public CategoryResponse getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(CategoryResponse categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -115,20 +123,19 @@ public class PropertyDto {
         this.loc = loc;
     }
 
-    @Override
-    public String toString() {
-        return "PropertyDto{" +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", rooms=" + rooms +
-                ", size=" + size +
-                ", categoryId='" + categoryId + '\'' +
-                ", address='" + address + '\'' +
-                ", zipcode='" + zipcode + '\'' +
-                ", city='" + city + '\'' +
-                ", province='" + province + '\'' +
-                ", loc='" + loc + '\'' +
-                '}';
+    public String[] getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(String[] photos) {
+        this.photos = photos;
+    }
+
+    public boolean isFav() {
+        return isFav;
+    }
+
+    public void setFav(boolean fav) {
+        isFav = fav;
     }
 }

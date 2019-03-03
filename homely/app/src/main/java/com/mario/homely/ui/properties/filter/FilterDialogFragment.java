@@ -30,14 +30,14 @@ public class FilterDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_filter_dialog, container, false);
         btnApplyFilters = v.findViewById(R.id.btn_apply_filters);
-        etRooms = v.findViewById(R.id.et_filters_rooms);
-        etCity = v.findViewById(R.id.et_filters_city);
-        etProvince = v.findViewById(R.id.et_filters_province);
-        etZipcode = v.findViewById(R.id.et_filters_zipcode);
-        etMinSize = v.findViewById(R.id.et_filters_minSize);
-        etMaxSize = v.findViewById(R.id.et_filters_maxSize);
-        etMinPrice = v.findViewById(R.id.et_filters_minPrice);
-        etMaxPrice = v.findViewById(R.id.et_filters_maxPrice);
+//        etRooms = v.findViewById(R.id.et_filters_rooms);
+//        etCity = v.findViewById(R.id.et_filters_city);
+//        etProvince = v.findViewById(R.id.et_filters_province);
+//        etZipcode = v.findViewById(R.id.et_filters_zipcode);
+//        etMinSize = v.findViewById(R.id.et_filters_minSize);
+//        etMaxSize = v.findViewById(R.id.et_filters_maxSize);
+//        etMinPrice = v.findViewById(R.id.et_filters_minPrice);
+//        etMaxPrice = v.findViewById(R.id.et_filters_maxPrice);
 //        etAddress = v.findViewById(R.id.et_filters_address);
         btnApplyFilters.setOnClickListener(new View.OnClickListener() {
             @Override

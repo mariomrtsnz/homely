@@ -1,5 +1,8 @@
 package com.mario.homely.ui.properties.addOne;
 
+import com.mario.homely.dto.PropertyDto;
+
 public interface AddPropertyListener {
-    void onAddSubmit(String title, String description, double price, int rooms, double size, String categoryId, String address, String zipcode, String city, String Province);
+    void onAddSubmit(PropertyDto propertyDto);
+    void onEditSubmit(PropertyDto propertyEditDto, String myPropertyEditId);
 }

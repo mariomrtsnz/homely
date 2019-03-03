@@ -138,4 +138,7 @@
     <string name="add_one_property_address_title">Address</string>
     <string name="menu_add_one">Add One Property</string>
     <string name="menu_filter">Filter</string>
+    <string name="add_one_property_zipcode_title">Zipcode</string>
+    <string name="add_one_property_city_title">City</string>
+    <string name="add_one_property_province_title">Province</string>
 </resources>

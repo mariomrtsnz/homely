@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mario.homely.R;
+import com.mario.homely.responses.MyPropertiesResponse;
 import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.responses.ResponseContainer;
 import com.mario.homely.retrofit.generator.AuthType;
@@ -36,7 +37,7 @@ public class MyPropertiesListFragment extends Fragment {
     String jwt;
     PropertyService service;
     UserService userService;
-    List<PropertyResponse> items;
+    List<MyPropertiesResponse> items;
     MyPropertiesListAdapter adapter;
     SwipeRefreshLayout swipeLayout;
     RecyclerView recycler;
@@ -66,10 +67,10 @@ public class MyPropertiesListFragment extends Fragment {
 
     public void listMyProperties() {
         PropertyService service = ServiceGenerator.createService(PropertyService.class, jwt, AuthType.JWT);
-        Call<ResponseContainer<PropertyResponse>> call = service.getMyProperties();
-        call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
+        Call<ResponseContainer<MyPropertiesResponse>> call = service.getMyProperties();
+        call.enqueue(new Callback<ResponseContainer<MyPropertiesResponse>>() {
             @Override
-            public void onResponse(Call<ResponseContainer<PropertyResponse>> call, Response<ResponseContainer<PropertyResponse>> response) {
+            public void onResponse(Call<ResponseContainer<MyPropertiesResponse>> call, Response<ResponseContainer<MyPropertiesResponse>> response) {
                 if (response.code() != 200) {
                     Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
                 } else {
@@ -82,7 +83,7 @@ public class MyPropertiesListFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ResponseContainer<PropertyResponse>> call, Throwable t) {
+            public void onFailure(Call<ResponseContainer<MyPropertiesResponse>> call, Throwable t) {
                 Log.e("Network Failure", t.getMessage());
                 Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
             }

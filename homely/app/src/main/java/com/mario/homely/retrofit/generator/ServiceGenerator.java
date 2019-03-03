@@ -12,6 +12,8 @@ public class ServiceGenerator {
 //    private static final String BASE_URL = "https://morning-chamber-30708.herokuapp.com/";
     private static final String BASE_URL = "https://realstatev2.herokuapp.com/";
     public static String MASTER_KEY = "hzasFUC4txHXVHHWvjkR2R7UxQ6kzBlw";
+    //    private static final String BASE_URL = "https://homely-2dam.herokuapp.com/";
+    //    public static String MASTER_KEY = "YuCPtLScbyrQ6uMrH0cXo";
     public static String jwtToken = null;
 
     private static Retrofit.Builder builder =

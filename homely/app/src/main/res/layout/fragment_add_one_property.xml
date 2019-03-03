@@ -138,10 +138,71 @@
             android:ems="10"
             android:hint="Address"
             android:inputType="textPostalAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toStartOf="@+id/et_add_one_property_zipcode"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_one_property_zipcode_title"
+            app:layout_constraintStart_toStartOf="@+id/et_add_one_property_zipcode"
+            app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+        <EditText
+            android:id="@+id/et_add_one_property_zipcode"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Zipcode"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/add_one_property_city_title"
+            app:layout_constraintStart_toStartOf="@+id/et_add_one_property_address"
+            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_address" />
+
+        <EditText
+            android:id="@+id/et_add_one_property_city"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="City"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_one_property_province_title"
+            app:layout_constraintStart_toStartOf="@+id/et_add_one_property_province"
+            app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+        <EditText
+            android:id="@+id/et_add_one_property_province"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="Province"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/et_add_one_property_city"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
         <fragment
             android:id="@+id/add_one_property_map"
@@ -155,8 +216,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_add_one_property_submit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_address"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/et_add_one_property_city" />
 
         <Button
             android:id="@+id/btn_add_one_property_submit"

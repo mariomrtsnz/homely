@@ -1,6 +1,7 @@
 package com.mario.homely.ui.properties.myProperties;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mario.homely.R;
+import com.mario.homely.responses.MyPropertiesResponse;
 import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.responses.UserResponse;
 import com.mario.homely.retrofit.generator.AuthType;
@@ -27,16 +29,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesListAdapter.ViewHolder> {
+public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesListAdapter.ViewHolder>{
     private final MyPropertiesListListener mListener;
     UserResponse user;
-    private List<PropertyResponse> data;
+    private List<MyPropertiesResponse> data;
     private Context context;
     private UserService userService;
     private PropertyService propertyService;
     private String jwt;
 
-    public MyPropertiesListAdapter(Context ctx, List<PropertyResponse> data, MyPropertiesListListener mListener) {
+    public MyPropertiesListAdapter(Context ctx, List<MyPropertiesResponse> data, MyPropertiesListListener mListener) {
         this.data = data;
         this.context = ctx;
         this.mListener = mListener;
@@ -76,10 +78,12 @@ public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesLi
         viewHolder.size.setText(String.valueOf(data.get(i).getSize()) + " sqft");
         viewHolder.price.setText(String.valueOf(data.get(i).getPrice()) + " €");
         viewHolder.fav.setOnClickListener(v -> updateFav(viewHolder, data.get(i)));
+        viewHolder.delete.setOnClickListener(v -> mListener.onPropertyDeleteClick(v, data.get(i)));
+        viewHolder.edit.setOnClickListener(v -> mListener.onPropertyEditClick(v, data.get(i)));
         viewHolder.mView.setOnClickListener(v -> mListener.onPropertyClick(v, viewHolder.mItem));
     }
 
-    void updateFav(ViewHolder v, PropertyResponse p) {
+    void updateFav(ViewHolder v, MyPropertiesResponse p) {
         propertyService = ServiceGenerator.createService(PropertyService.class, jwt, AuthType.JWT);
         if (v.isFav) {
             Call<UserResponse> call = propertyService.deleteAsFav(p.getId());
@@ -131,7 +135,7 @@ public class MyPropertiesListAdapter extends RecyclerView.Adapter<MyPropertiesLi
         public final ImageView coverImage;
         public final FloatingActionButton fav, edit, delete;
         public boolean isFav;
-        public PropertyResponse mItem;
+        public MyPropertiesResponse mItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
