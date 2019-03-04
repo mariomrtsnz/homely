@@ -1,5 +1,6 @@
 package com.mario.homely.ui.properties.listview;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class PropertiesListFragment extends Fragment {
     private Context ctx;
     private int mColumnCount = 1;
     private boolean asc;
+    ProgressDialog pgDialog;
     Map<String, String> options = new HashMap<>();
 
 
@@ -149,6 +151,7 @@ public class PropertiesListFragment extends Fragment {
                             emptyMessage.setVisibility(View.VISIBLE);
                             recycler.setVisibility(View.GONE);
                         }
+                        pgDialog.dismiss();
                         adapter = new PropertiesListAdapter(ctx, items, mListener);
                         recycler.setAdapter(adapter);
                     }
@@ -193,6 +196,11 @@ public class PropertiesListFragment extends Fragment {
             }
             items = new ArrayList<>();
             listProperties();
+            pgDialog = new ProgressDialog(ctx, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+            pgDialog.setIndeterminate(true);
+            pgDialog.setCancelable(false);
+            pgDialog.setTitle("Loading data");
+            pgDialog.show();
             adapter = new PropertiesListAdapter(ctx, items, mListener);
             recycler.setAdapter(adapter);
             swipeLayout = layout.findViewById(R.id.swipeContainer);

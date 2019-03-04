@@ -3,6 +3,7 @@ package com.mario.homely.ui.common.main;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     private String activePropertyId;
     private ProgressBar progressBar;
     private Uri imageUri;
+    private ProgressDialog pgDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,6 +244,11 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                     builder.setPositiveButton(positiveText, (dialog, which) -> {
                         activeProperty = response.body();
                         getPhotoAndUpload();
+                        pgDialog = new ProgressDialog(MainActivity.this, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+                        pgDialog.setIndeterminate(true);
+                        pgDialog.setCancelable(false);
+                        pgDialog.setTitle("Creating data");
+                        pgDialog.show();
                     });
 
                     String negativeText = getString(android.R.string.cancel);
@@ -316,6 +323,8 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
                                 Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
                                         .replace(R.id.contenedor, new MyPropertiesListFragment())
                                         .commit();
+                                if (pgDialog != null)
+                                    pgDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Created With Photo Successfully", Toast.LENGTH_SHORT).show();
                             }
 

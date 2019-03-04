@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.mario.homely.R;
+import com.mario.homely.responses.GetOneContainer;
 import com.mario.homely.responses.PhotoResponse;
+import com.mario.homely.responses.PropertyResponse;
 import com.mario.homely.retrofit.generator.AuthType;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.PhotoService;
@@ -38,6 +40,7 @@ public class PhotosFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
     private String propertyId;
+    private PropertyResponse selectedProperty;
     private String mParam2;
     private Context ctx;
     private String jwt;
@@ -101,6 +104,31 @@ public class PhotosFragment extends Fragment {
         recycler.setAdapter(adapter);
     }
 
+    void loadProperty() {
+        PropertyService propertyService = ServiceGenerator.createService(PropertyService.class);
+        Call<GetOneContainer<PropertyResponse>> call = propertyService.getProperty(propertyId);
+        call.enqueue(new Callback<GetOneContainer<PropertyResponse>>() {
+            @Override
+            public void onResponse(Call<GetOneContainer<PropertyResponse>> call, Response<GetOneContainer<PropertyResponse>> response) {
+                if (response.code() != 200) {
+                    Toast.makeText(ctx, "Request Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    selectedProperty = response.body().getRows();
+                    propertyId = response.body().getRows().getId();
+                    photosIdArray = selectedProperty.getPhotos();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetOneContainer<PropertyResponse>> call, Throwable t) {
+                Log.e("Network Failure", t.getMessage());
+                Toast.makeText(ctx, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+        adapter = new PhotosAdapter(ctx, photosIdArray, mListener);
+        recycler.setAdapter(adapter);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,7 +143,8 @@ public class PhotosFragment extends Fragment {
                 recycler.setLayoutManager(new GridLayoutManager(ctx, mColumnCount));
             }
             photoResponsesArray = new ArrayList<>();
-            loadPhotos();
+            loadProperty();
+//            loadPhotos();
             adapter = new PhotosAdapter(ctx, photosIdArray, mListener);
             recycler.setAdapter(adapter);
             layout.findViewById(R.id.fab_photos_add).setOnClickListener(v -> mListener.addImage(propertyId));

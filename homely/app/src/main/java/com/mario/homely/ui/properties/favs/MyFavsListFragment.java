@@ -1,5 +1,6 @@
 package com.mario.homely.ui.properties.favs;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +43,7 @@ public class MyFavsListFragment extends Fragment {
     SwipeRefreshLayout swipeLayout;
     RecyclerView recycler;
     TextView emptyMessage;
+    private ProgressDialog pgDialog;
     private MyFavsListListener mListener;
     private Context ctx;
     private int mColumnCount = 1;
@@ -82,6 +84,7 @@ public class MyFavsListFragment extends Fragment {
                         emptyMessage.setVisibility(View.VISIBLE);
                         recycler.setVisibility(View.GONE);
                     }
+                    pgDialog.dismiss();
                 }
             }
 
@@ -122,6 +125,11 @@ public class MyFavsListFragment extends Fragment {
             }
             items = new ArrayList<>();
             listMyFavs();
+            pgDialog = new ProgressDialog(ctx, R.style.Theme_AppCompat_DayNight_Dialog_Alert);
+            pgDialog.setIndeterminate(true);
+            pgDialog.setCancelable(false);
+            pgDialog.setTitle("Loading data");
+            pgDialog.show();
             adapter = new MyFavsListAdapter(ctx, items, mListener);
             recycler.setAdapter(adapter);
             swipeLayout = layout.findViewById(R.id.swipeContainer);
