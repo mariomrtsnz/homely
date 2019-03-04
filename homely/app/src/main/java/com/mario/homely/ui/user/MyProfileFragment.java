@@ -3,22 +3,31 @@ package com.mario.homely.ui.user;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.mario.homely.R;
+import com.mario.homely.responses.MyPropertiesResponse;
+import com.mario.homely.responses.ResponseContainer;
+import com.mario.homely.responses.UserResponse;
+import com.mario.homely.retrofit.generator.AuthType;
+import com.mario.homely.retrofit.generator.ServiceGenerator;
+import com.mario.homely.retrofit.services.PropertyService;
+import com.mario.homely.retrofit.services.UserService;
+import com.mario.homely.ui.properties.myProperties.MyPropertiesListAdapter;
+import com.mario.homely.util.UtilToken;
 
 import androidx.fragment.app.Fragment;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MyProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MyProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MyProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +37,11 @@ public class MyProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TextView name, username, email;
+    private ImageView profilePic;
+    private UserResponse me;
+    private String jwt;
+    private Context ctx;
 
     private MyProfileListener mListener;
 
@@ -62,22 +76,53 @@ public class MyProfileFragment extends Fragment {
         }
     }
 
+    private void loadUser(View layout) {
+        UserService service = ServiceGenerator.createService(UserService.class, jwt, AuthType.JWT);
+        Call<UserResponse> call = service.getMe();
+        call.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.code() != 200) {
+                    Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
+                } else {
+                    me = response.body();
+                    username.setText(me.getName());
+                    email.setText(me.getEmail());
+                    Glide.with(ctx).load(me.getPicture()).into(profilePic);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Log.e("Network Failure", t.getMessage());
+                Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_profile, container, false);
+        View layout = inflater.inflate(R.layout.fragment_my_profile, container, false);
+        username = layout.findViewById(R.id.tv_my_profile_username);
+        email = layout.findViewById(R.id.tv_my_profile_email);
+        profilePic = layout.findViewById(R.id.iv_my_profile_profile_image);
+        loadUser(layout);
+        return layout;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        ctx = context;
         if (context instanceof MyProfileListener) {
             mListener = (MyProfileListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement MyProfileListener");
         }
+        jwt = UtilToken.getToken(context);
     }
 
     @Override

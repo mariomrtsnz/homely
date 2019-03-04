@@ -12,9 +12,9 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_my_profile_profile_image"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
@@ -24,24 +24,14 @@
             tools:src="@tools:sample/avatars[3]" />
 
         <TextView
-            android:id="@+id/tv_my_profile_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Name"
-            app:layout_constraintEnd_toEndOf="@+id/imageView3"
-            app:layout_constraintStart_toStartOf="@+id/imageView3"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-        <TextView
             android:id="@+id/tv_my_profile_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="Username"
-            app:layout_constraintEnd_toEndOf="@+id/tv_my_profile_name"
-            app:layout_constraintStart_toStartOf="@+id/tv_my_profile_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_my_profile_name" />
+            app:layout_constraintEnd_toEndOf="@+id/iv_my_profile_profile_image"
+            app:layout_constraintStart_toStartOf="@+id/iv_my_profile_profile_image"
+            app:layout_constraintTop_toBottomOf="@+id/iv_my_profile_profile_image" />
 
         <TextView
             android:id="@+id/tv_my_profile_email"

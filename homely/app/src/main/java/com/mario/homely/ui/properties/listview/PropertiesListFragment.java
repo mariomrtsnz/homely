@@ -126,6 +126,7 @@ public class PropertiesListFragment extends Fragment {
                             emptyMessage.setVisibility(View.VISIBLE);
                             recycler.setVisibility(View.GONE);
                         }
+                        pgDialog.dismiss();
                         adapter = new PropertiesListAdapter(ctx, items, mListener);
                         recycler.setAdapter(adapter);
                     }
