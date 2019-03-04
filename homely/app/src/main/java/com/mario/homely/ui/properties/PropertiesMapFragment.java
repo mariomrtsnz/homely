@@ -248,7 +248,7 @@ public class PropertiesMapFragment extends Fragment implements OnMapReadyCallbac
     private void showNearbyLocations(double latitude, double longitude) {
         PropertyService service = ServiceGenerator.createService(PropertyService.class);
         String coords = longitude + "," + latitude;
-        Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesNearby(coords, 5000);
+        Call<ResponseContainer<PropertyResponse>> call = service.listPropertiesNearby(coords, "5000");
 
         call.enqueue(new Callback<ResponseContainer<PropertyResponse>>() {
             @Override

@@ -27,6 +27,7 @@ import com.mario.homely.responses.ResponseContainer;
 import com.mario.homely.retrofit.generator.ServiceGenerator;
 import com.mario.homely.retrofit.services.CategoryService;
 import com.mario.homely.util.CustomGeocoder;
+import com.mario.homely.util.UtilToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
     SupportPlaceAutocompleteFragment placeAutoComplete;
     private MyPropertiesResponse myProperty;
     private List<CategoryResponse> categories = new ArrayList<>();
+    private String jwt;
     private Context ctx;
 
 
@@ -207,6 +209,10 @@ public class AddOnePropertyFragment extends Fragment implements OnMapReadyCallba
             throw new RuntimeException(context.toString()
                     + " must implement AddPropertyListener");
         }
+        jwt = UtilToken.getToken(context);
+//        if (jwt == null) {
+//            this.finalize();
+//        }
     }
 
     @Override

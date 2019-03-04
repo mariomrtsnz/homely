@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.mario.homely.R;
 import com.mario.homely.ui.properties.listview.PropertiesListFragment;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,45 +31,47 @@ public class FilterDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_filter_dialog, container, false);
         btnApplyFilters = v.findViewById(R.id.btn_apply_filters);
-//        etRooms = v.findViewById(R.id.et_filters_rooms);
-//        etCity = v.findViewById(R.id.et_filters_city);
-//        etProvince = v.findViewById(R.id.et_filters_province);
-//        etZipcode = v.findViewById(R.id.et_filters_zipcode);
-//        etMinSize = v.findViewById(R.id.et_filters_minSize);
-//        etMaxSize = v.findViewById(R.id.et_filters_maxSize);
-//        etMinPrice = v.findViewById(R.id.et_filters_minPrice);
-//        etMaxPrice = v.findViewById(R.id.et_filters_maxPrice);
-//        etAddress = v.findViewById(R.id.et_filters_address);
-        btnApplyFilters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rooms = etRooms.getText().toString();
-                city = etCity.getText().toString();
-                province = etProvince.getText().toString();
-                zipcode = etZipcode.getText().toString();
-                minSize = etMinSize.getText().toString();
-                maxSize = etMaxSize.getText().toString();
-                minPrice = etMinPrice.getText().toString();
-                maxPrice = etMaxPrice.getText().toString();
-                if (!rooms.isEmpty())
-                    options.put("rooms", rooms);
-                if (!city.isEmpty())
-                    options.put("city", city);
-                if (!province.isEmpty())
-                    options.put("province", province);
-                if (!zipcode.isEmpty())
-                    options.put("zipcode", zipcode);
-                if (!minSize.isEmpty())
-                    options.put("min_size", minSize);
-                if (!maxSize.isEmpty())
-                    options.put("max_size", maxSize);
-                if (!minPrice.isEmpty())
-                    options.put("min_price", minPrice);
-                if (!maxPrice.isEmpty())
-                    options.put("max_price", maxPrice);
+        etRooms = v.findViewById(R.id.et_filter_rooms);
+        etCity = v.findViewById(R.id.et_filter_city);
+        etProvince = v.findViewById(R.id.et_filter_province);
+        etZipcode = v.findViewById(R.id.et_filter_zipcode);
+        etMinSize = v.findViewById(R.id.et_filter_size_min);
+        etMaxSize = v.findViewById(R.id.et_filter_size_max);
+        etMinPrice = v.findViewById(R.id.et_filter_price_min);
+        etMaxPrice = v.findViewById(R.id.et_filter_price_max);
+//        etAddress = v.findViewById(R.id.et_filter_address);
+        btnApplyFilters.setOnClickListener(v1 -> {
+            rooms = etRooms.getText().toString();
+            city = etCity.getText().toString();
+            province = etProvince.getText().toString();
+            zipcode = etZipcode.getText().toString();
+            minSize = etMinSize.getText().toString();
+            maxSize = etMaxSize.getText().toString();
+            minPrice = etMinPrice.getText().toString();
+            maxPrice = etMaxPrice.getText().toString();
+            if (!rooms.isEmpty())
+                options.put("rooms", rooms);
+            if (!city.isEmpty())
+                options.put("city", city);
+            if (!province.isEmpty())
+                options.put("province", province);
+            if (!zipcode.isEmpty())
+                options.put("zipcode", zipcode);
+            if (!minSize.isEmpty())
+                options.put("min_size", minSize);
+            if (!maxSize.isEmpty())
+                options.put("max_size", maxSize);
+            if (!minPrice.isEmpty())
+                options.put("min_price", minPrice);
+            if (!maxPrice.isEmpty())
+                options.put("max_price", maxPrice);
 
-                getFragmentManager().beginTransaction().replace(R.id.contenedor, new PropertiesListFragment(options)).commit();
-            }
+            PropertiesListFragment propertiesFilteredListFragment =  new PropertiesListFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("options", (Serializable) options);
+            propertiesFilteredListFragment.setArguments(bundle);
+            getFragmentManager().beginTransaction().replace(R.id.contenedor, propertiesFilteredListFragment).commit();
+            dismiss();
         });
         return v;
     }

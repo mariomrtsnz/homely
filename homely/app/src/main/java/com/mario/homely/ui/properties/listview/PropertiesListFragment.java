@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mario.homely.R;
@@ -44,6 +45,8 @@ public class PropertiesListFragment extends Fragment {
     PropertiesListAdapter adapter;
     SwipeRefreshLayout swipeLayout;
     RecyclerView recycler;
+    TextView emptyMessage;
+    private boolean isEmpty;
     private PropertiesListListener mListener;
     private Context ctx;
     private int mColumnCount = 1;
@@ -97,10 +100,6 @@ public class PropertiesListFragment extends Fragment {
 
     public PropertiesListFragment() {}
 
-    public PropertiesListFragment(Map<String, String> options) {
-        this.options = options;
-    }
-
     // TODO: Rename and change types and number of parameters
     public static PropertiesListFragment newInstance(int columnCount) {
         PropertiesListFragment fragment = new PropertiesListFragment();
@@ -121,6 +120,10 @@ public class PropertiesListFragment extends Fragment {
                         Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
                     } else {
                         items = response.body().getRows();
+                        if (items.isEmpty()) {
+                            emptyMessage.setVisibility(View.VISIBLE);
+                            recycler.setVisibility(View.GONE);
+                        }
                         adapter = new PropertiesListAdapter(ctx, items, mListener);
                         recycler.setAdapter(adapter);
                     }
@@ -142,6 +145,10 @@ public class PropertiesListFragment extends Fragment {
                         Toast.makeText(getActivity(), "Request Error", Toast.LENGTH_SHORT).show();
                     } else {
                         items = response.body().getRows();
+                        if (items.isEmpty()) {
+                            emptyMessage.setVisibility(View.VISIBLE);
+                            recycler.setVisibility(View.GONE);
+                        }
                         adapter = new PropertiesListAdapter(ctx, items, mListener);
                         recycler.setAdapter(adapter);
                     }
@@ -161,6 +168,7 @@ public class PropertiesListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            this.options = (Map<String, String>) getArguments().getSerializable("options");
         }
         jwt = UtilToken.getToken(getContext());
     }
@@ -177,6 +185,7 @@ public class PropertiesListFragment extends Fragment {
         if (layout instanceof SwipeRefreshLayout) {
             ctx = layout.getContext();
             recycler = layout.findViewById(R.id.properties_list);
+            emptyMessage = layout.findViewById(R.id.tv_empty_properties);
             if (mColumnCount <= 1) {
                 recycler.setLayoutManager(new LinearLayoutManager(ctx));
             } else {
@@ -186,7 +195,6 @@ public class PropertiesListFragment extends Fragment {
             listProperties();
             adapter = new PropertiesListAdapter(ctx, items, mListener);
             recycler.setAdapter(adapter);
-
             swipeLayout = layout.findViewById(R.id.swipeContainer);
             swipeLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorPrimary), ContextCompat.getColor(getContext(), R.color.colorAccent));
             swipeLayout.setOnRefreshListener(() -> {

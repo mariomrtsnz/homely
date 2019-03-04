@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mario.homely.R;
 import com.mario.homely.responses.GetOneContainer;
@@ -39,18 +40,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class PropertyDetailsActivity extends Activity implements PropertyDetailsListener, OnMapReadyCallback {
+public class PropertyDetailsActivity extends Activity implements PropertyDetailsListener {
     private PropertyResponse selectedProperty;
     private ImageView goBackArrow, coverImage;
     private TextView description, direction, rooms, size, price, location;
     private RecyclerView recyclerViewGallery;
     private FloatingActionButton fabFav, rentNow;
+    private Chip category;
     private Toolbar title;
     private List<String> arrayPhotos;
     private PropertyDetailsAdapter adapter;
     private PropertyService propertyService;
-    private PropertiesDetailsListener listener;
-    private boolean isFav = false;
+    private PropertyDetailsListener listener;
+    private boolean isFav;
     private MapView mMap;
     private GoogleMap map;
     private LatLng loc;
@@ -60,18 +62,21 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_details);
+        isFav = getIntent().getBooleanExtra("isFav", false);
         loadPropertyData(getIntent().getStringExtra("propertyId"));
         mMap = findViewById(R.id.property_details_lite_map);
-//        goBackArrow = findViewById(R.id.iv_property_details_goback);
+        category = findViewById(R.id.chip_property_details_category);
+        recyclerViewGallery = findViewById(R.id.property_details_recycler_gallery);
+        recyclerViewGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
         coverImage = findViewById(R.id.iv_property_details_coverImage);
         title = findViewById(R.id.tv_property_details_title);
         fabFav = findViewById(R.id.fab_property_details_fav);
+        if(isFav)
+            fabFav.setImageResource(R.drawable.ic_favorite_black_24dp);
         fabFav.setOnClickListener(v -> {
             updateFav(v);
         });
-        recyclerViewGallery = findViewById(R.id.property_details_recycler_gallery);
-        recyclerViewGallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        adapter = new PropertyDetailsAdapter(this, arrayPhotos);
+        setmMap();
         price = findViewById(R.id.tv_property_details_price);
         rooms = findViewById(R.id.tv_property_details_rooms);
         size = findViewById(R.id.tv_property_details_size);
@@ -84,21 +89,44 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
 //        });
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-    }
-
     private void setmMap() {
         if (mMap != null) {
             mMap.onCreate(null);
             mMap.getMapAsync(googleMap -> {
-                googleMap.clear();
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 20));
-                googleMap.addMarker(new MarkerOptions().position(loc));
+                map = googleMap;
             });
             MapsInitializer.initialize(this);
         }
+    }
+
+    private void setMapPosition(LatLng loc) {
+        map.clear();
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 16));
+        map.addMarker(new MarkerOptions().position(loc));
+    }
+
+    @Override
+    protected void onResume() {
+        mMap.onResume();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        mMap.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mMap.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        mMap.onLowMemory();
+        super.onLowMemory();
     }
 
     private void loadPropertyData(String propertyId) {
@@ -118,6 +146,7 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
                     description.setText(selectedProperty.getDescription());
                     location.setText(selectedProperty.getAddress());
                     arrayPhotos = selectedProperty.getPhotos();
+                    category.setChipText(selectedProperty.getCategoryId().getName());
                     float lng = Float.parseFloat(selectedProperty.getLoc().split(",")[0]);
                     float lat = Float.parseFloat(selectedProperty.getLoc().split(",")[1]);
                     loc = new LatLng(lng, lat);
@@ -125,9 +154,11 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
                         fabFav.setImageResource(R.drawable.ic_favorite_black_24dp);
                         isFav = true;
                     }
+                    setMapPosition(loc);
                     if (arrayPhotos.size() > 0)
                         Glide.with(getBaseContext()).load(arrayPhotos.get(arrayPhotos.size()-1)).into(coverImage);
-                    setmMap();
+                    adapter = new PropertyDetailsAdapter(PropertyDetailsActivity.this, arrayPhotos);
+                    recyclerViewGallery.setAdapter(adapter);
                 }
             }
 
@@ -144,7 +175,7 @@ public class PropertyDetailsActivity extends Activity implements PropertyDetails
     @Override
     public void updateFav(View v) {
         propertyService = ServiceGenerator.createService(PropertyService.class, UtilToken.getToken(this), AuthType.JWT);
-        if (selectedProperty.isFav()) {
+        if (isFav) {
             Call<UserResponse> call = propertyService.deleteAsFav(getIntent().getStringExtra("propertyId"));
             call.enqueue(new Callback<UserResponse>() {
                 @Override

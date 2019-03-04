@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mario.homely.R;
@@ -41,10 +42,11 @@ public class MyPropertiesListFragment extends Fragment {
     MyPropertiesListAdapter adapter;
     SwipeRefreshLayout swipeLayout;
     RecyclerView recycler;
+    TextView emptyMessage;
     private MyPropertiesListListener mListener;
     private Context ctx;
     private int mColumnCount = 1;
-    private boolean asc;
+    private boolean asc, isEmpty;
 //    MenuItem menuItemSort;
     private boolean earnedFilter = false;
 
@@ -77,14 +79,20 @@ public class MyPropertiesListFragment extends Fragment {
                     items = response.body().getRows();
                     adapter = new MyPropertiesListAdapter(ctx, items, mListener);
                     recycler.setAdapter(adapter);
-                    if (items.isEmpty())
-                        Toast.makeText(ctx,"No Properties Owned", Toast.LENGTH_LONG).show();
+                    if (items.isEmpty()) {
+                        emptyMessage.setVisibility(View.VISIBLE);
+                        recycler.setVisibility(View.GONE);
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseContainer<MyPropertiesResponse>> call, Throwable t) {
                 Log.e("Network Failure", t.getMessage());
+                if (items.isEmpty()) {
+                    emptyMessage.setVisibility(View.VISIBLE);
+                    recycler.setVisibility(View.GONE);
+                }
                 Toast.makeText(getActivity(), "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
@@ -111,6 +119,7 @@ public class MyPropertiesListFragment extends Fragment {
         if (layout instanceof SwipeRefreshLayout) {
             ctx = layout.getContext();
             recycler = layout.findViewById(R.id.properties_list);
+            emptyMessage = layout.findViewById(R.id.tv_empty_properties);
             if (mColumnCount <= 1) {
                 recycler.setLayoutManager(new LinearLayoutManager(ctx));
             } else {

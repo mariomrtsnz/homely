@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     private CreatedPropertyResponse activeProperty;
     private String activePropertyId;
     private ProgressBar progressBar;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
             switch (item.getItemId()) {
                 case R.id.btn_add:
                     Objects.requireNonNull(getSupportFragmentManager()).beginTransaction()
-                            .replace(R.id.contenedor, new AddOnePropertyFragment())
+                            .replace(R.id.contenedor, new AddOnePropertyFragment()).addToBackStack(null)
                             .commit();
                     return true;
                 case R.id.btn_filter:
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
     public void onPropertyClick(View v, PropertyResponse property) {
         Intent i = new Intent(this, PropertyDetailsActivity.class);
         i.putExtra("propertyId", property.getId());
+        i.putExtra("isFav", property.isFav());
         startActivity(i);
     }
 
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
         bundle.putStringArrayList("propertyPhotos", new ArrayList<>(property.getPhotos()));
         bundle.putString("propertyId", property.getId());
         photosFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, photosFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, photosFragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -270,11 +272,11 @@ public class MainActivity extends AppCompatActivity implements PropertiesListLis
         startActivityForResult(intent, OPEN_DOCUMENT_CODE);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (requestCode == OPEN_DOCUMENT_CODE && resultCode == RESULT_OK) {
             if (resultData != null) {
-                // this is the image selected by the user
                 Uri imageUri = resultData.getData();
                 InputStream inputStream = null;
                 try {

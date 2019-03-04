@@ -64,74 +64,21 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_property_details_location"
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/et_filter_rooms"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="LOCATION"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Rooms"
+                        android:inputType="number"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Price (€)"
-                        app:layout_constraintStart_toStartOf="@+id/tv_property_details_location"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_property_details_location" />
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="Size (sqft)"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/imageView2" />
-
-                    <TextView
-                        android:id="@+id/tv_property_details_size"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/textView2"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-                    <TextView
-                        android:id="@+id/tv_property_details_rooms"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView2"
-                        app:layout_constraintStart_toStartOf="@+id/imageView2"
-                        app:layout_constraintTop_toTopOf="@+id/tv_property_details_price" />
-
-                    <TextView
-                        android:id="@+id/tv_property_details_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/textView3"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_bed"
-                        app:layout_constraintEnd_toStartOf="@+id/textView2"
-                        app:layout_constraintStart_toEndOf="@+id/textView3"
-                        app:layout_constraintTop_toTopOf="@+id/textView3" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -199,19 +146,20 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_property_details_description"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                    <EditText
+                        android:id="@+id/et_filter_city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="8dp" />
+                        android:layout_marginBottom="8dp"
+                        android:hint="City"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -270,8 +218,7 @@
             <com.github.florent37.expansionpanel.ExpansionLayout
                 android:id="@+id/gallery_expansionLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:expansion_expanded="true">
+                android:layout_height="wrap_content">
 
                 <!-- CONTENT -->
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -279,13 +226,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    <TextView
+
+                    <EditText
+                        android:id="@+id/et_filter_province"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
+                        android:hint="Province"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -357,13 +307,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_filter_zipcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="8dp"
+                        android:hint="Zipcode"
+                        android:inputType="number"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -429,26 +382,45 @@
                 android:layout_height="wrap_content">
 
                 <!-- CONTENT -->
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/size_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/et_filter_size_min"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:hint="Min Size"
+                        android:inputType="number"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintEnd_toStartOf="@+id/et_filter_size_max"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <EditText
+                        android:id="@+id/et_filter_size_max"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Max Size"
+                        android:inputType="number"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
 
             </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
@@ -507,26 +479,46 @@
                 android:layout_height="wrap_content">
 
                 <!-- CONTENT -->
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/price_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <EditText
+                        android:id="@+id/et_filter_price_min"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
+                        android:hint="Min Price"
+                        android:inputType="number"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/et_filter_price_max"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <EditText
+                        android:id="@+id/et_filter_price_max"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Max Price"
+                        android:inputType="number"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
 
             </com.github.florent37.expansionpanel.ExpansionLayout>
         </LinearLayout>
@@ -538,6 +530,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        android:clickable="true"
         android:text="Apply Filters"
         android:textColor="@android:color/white" />
 

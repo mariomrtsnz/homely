@@ -115,15 +115,15 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
                     getActivity().finish();
                     return true;
                 case R.id.bottomdrawer_my_properties:
-                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyPropertiesListFragment()).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyPropertiesListFragment()).addToBackStack(null).commit();
                     dismiss();
                     return true;
                 case R.id.bottomdrawer_favourites:
-                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyFavsListFragment()).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyFavsListFragment()).addToBackStack(null).commit();
                     dismiss();
                     return true;
                 case R.id.bottomdrawer_my_profile:
-                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyProfileFragment()).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.contenedor, new MyProfileFragment()).addToBackStack(null).commit();
                     dismiss();
                     return true;
                 case R.id.bottomdrawer_logout:

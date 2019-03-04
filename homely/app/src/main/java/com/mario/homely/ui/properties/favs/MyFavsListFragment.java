@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mario.homely.R;
@@ -40,6 +41,7 @@ public class MyFavsListFragment extends Fragment {
     MyFavsListAdapter adapter;
     SwipeRefreshLayout swipeLayout;
     RecyclerView recycler;
+    TextView emptyMessage;
     private MyFavsListListener mListener;
     private Context ctx;
     private int mColumnCount = 1;
@@ -76,8 +78,10 @@ public class MyFavsListFragment extends Fragment {
                     items = response.body().getRows();
                     adapter = new MyFavsListAdapter(ctx, items, mListener);
                     recycler.setAdapter(adapter);
-                    if (items.isEmpty())
-                        Toast.makeText(ctx,"No Favourite Properties", Toast.LENGTH_LONG).show();
+                    if (items.isEmpty()) {
+                        emptyMessage.setVisibility(View.VISIBLE);
+                        recycler.setVisibility(View.GONE);
+                    }
                 }
             }
 
@@ -110,6 +114,7 @@ public class MyFavsListFragment extends Fragment {
         if (layout instanceof SwipeRefreshLayout) {
             ctx = layout.getContext();
             recycler = layout.findViewById(R.id.properties_list);
+            emptyMessage = layout.findViewById(R.id.tv_empty_properties);
             if (mColumnCount <= 1) {
                 recycler.setLayoutManager(new LinearLayoutManager(ctx));
             } else {

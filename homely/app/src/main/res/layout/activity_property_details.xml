@@ -4,7 +4,8 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    xmlns:map="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -54,6 +55,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="24dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_property_details_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/card_margin"
+                android:textColor="@android:color/white"
+                app:chipBackgroundColor="@color/colorAccent" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -328,8 +337,7 @@
                     <com.github.florent37.expansionpanel.ExpansionLayout
                         android:id="@+id/gallery_expansionLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:expansion_expanded="true">
+                        android:layout_height="wrap_content">
 
                         <!-- CONTENT -->
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -340,13 +348,14 @@
 
                             <HorizontalScrollView
                                 android:layout_width="wrap_content"
-                                android:layout_height="140dp"
+                                android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginBottom="8dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
 
@@ -360,6 +369,7 @@
                                         android:id="@+id/property_details_recycler_gallery"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
+                                        android:orientation="horizontal"
                                         tools:listitem="@layout/property_details_custom_image" />
 
                                 </LinearLayout>
@@ -372,10 +382,25 @@
 
             </androidx.cardview.widget.CardView>
 
+            <!--<fragment-->
+                <!--android:id="@+id/property_details_lite_map"-->
+                <!--class="com.google.android.gms.maps.SupportMapFragment"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginEnd="8dp"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--app:layout_constraintBottom_toTopOf="@+id/btn_add_one_property_submit"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/spinner_categories" />-->
             <com.google.android.gms.maps.MapView
                 android:id="@+id/property_details_lite_map"
                 android:layout_width="match_parent"
-                android:layout_height="200dp" />
+                android:apiKey="@string/gMap_apikey"
+                android:layout_height="200dp"
+                map:liteMode="true"/>
 
         </LinearLayout>
 
